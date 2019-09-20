@@ -1,0 +1,16 @@
+﻿@model WebStore.ViewModel.EmployeeView
+
+
+
+    <div class="container">
+        <table class="table">
+            <tr>
+                <td>@Model.Id</td>
+                <td>@Model.FirstName</td>
+                <td>@Model.SurName</td>
+                <td>@Model.Age</td>
+                <td>@Html.ActionLink("Назад к списку", actionName:"Index")</td>
+            </tr>
+        </table>
+    </div>
+
