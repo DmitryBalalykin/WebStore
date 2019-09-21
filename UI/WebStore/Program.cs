@@ -26,6 +26,7 @@ namespace WebStore
                 try
                 {
                     DbInitializer.Initializre(context);
+                    DbInitializer.InitializreUsers(services);
                 }
                 catch (Exception ex)
                 {

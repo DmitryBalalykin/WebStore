@@ -30,6 +30,7 @@ namespace WebStore
         {
             services.AddMvc();
 
+            services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
             services.AddSingleton<IProductService, InMemoryProductService>();
             services.AddScoped<IProductService, SqlProductService>();
 

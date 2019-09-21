@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using WebStore.DomainNew.Entities;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading;
 
 namespace WebStore.DAL
 {
@@ -437,6 +440,45 @@ namespace WebStore.DAL
 
                 trans.Commit();
             }
+        }
+
+        public static void InitializreUsers(IServiceProvider services)
+        {
+            var roleManager = services.GetService<RoleManager<IdentityRole>>();
+            EnsureRole(roleManager, "User");
+            EnsureRole(roleManager, "Admin");
+
+            EnsureRoleToUser(services, "Admin", "Admin", "Admin123");
+        }
+
+        private static void EnsureRoleToUser(IServiceProvider services, string userName, string roleName, string password)
+        {
+            var userManager = services.GetService<UserManager<User>>();
+
+            var users = services.GetService<IUserStore<User>>();
+
+            if (users.FindByNameAsync(userName, CancellationToken.None).Result != null)
+            {
+                return;
+            }
+
+            var admin = new User
+            {
+                UserName = userName,
+                Email = $"{userName}@domain.com"
+            };
+
+            if (userManager.CreateAsync(admin, password).Result.Succeeded)
+                userManager.AddToRoleAsync(admin, roleName).Wait();
+
+        }
+
+        private static void EnsureRole(RoleManager<IdentityRole> roleManager, string roleName)
+        {
+
+            if (!roleManager.RoleExistsAsync(roleName).Result)
+            roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
+
         }
     }
 }
