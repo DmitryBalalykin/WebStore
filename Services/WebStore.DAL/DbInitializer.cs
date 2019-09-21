@@ -448,7 +448,7 @@ namespace WebStore.DAL
             EnsureRole(roleManager, "User");
             EnsureRole(roleManager, "Admin");
 
-            EnsureRoleToUser(services, "Admin", "Admin", "Admin123");
+            EnsureRoleToUser(services, "Admin", "Admin", "Admin@123");
         }
 
         private static void EnsureRoleToUser(IServiceProvider services, string userName, string roleName, string password)

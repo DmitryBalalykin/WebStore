@@ -418,5 +418,10 @@ namespace WebStore.Infrastucture.Implementations
         {
             return _products;
         }
+
+        public Product GetProductById(int id)
+        {
+            return _products.FirstOrDefault(x => x.Id == id);
+        }
     }
 }

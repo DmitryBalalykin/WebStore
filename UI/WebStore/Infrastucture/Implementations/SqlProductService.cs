@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,7 +26,10 @@ namespace WebStore.Infrastucture.Implementations
 
         public IEnumerable<Product> GetProducts(ProductFilter filter)
         {
-            var products = _context.Products.AsQueryable();
+            var products = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Section)
+                .AsQueryable();
 
             if (filter.SectionId.HasValue)//Если фильтр .HesValue-задан
                 products = products.Where(x => x.SectionId == filter.SectionId.Value);
@@ -44,6 +48,14 @@ namespace WebStore.Infrastucture.Implementations
         public IEnumerable<Section> GetSections()
         {
             return _context.Sections.ToList();
+        }
+
+        public Product GetProductById(int id)
+        {
+            return _context.Products
+                .Include(p=> p.Brand)
+                .Include(p=>p.Section)
+                .FirstOrDefault(p => p.Id == id);
         }
     }
 }
