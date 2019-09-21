@@ -14,7 +14,12 @@
                     <h2>@item.Price.ToString(format:"C")</h2>
                     <p>@item.Name</p>
                     </a>
-                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                    <a
+                       asp-controller="Cart"
+                       asp-action="AddToCart"
+                       asp-route-id="@item.Id"
+                       asp-route-returnUrl="@Context.Request.Path"
+                       class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
                 </div>
             </div>
             <div class="choose">

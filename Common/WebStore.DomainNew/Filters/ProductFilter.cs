@@ -17,5 +17,7 @@ namespace WebStore.DomainNew.Filters
         public bool? StatusNew { get; set; }
 
         public bool? StatusSale { get; set; }
+
+        public List<int> Ids { get; set; }
     }
 }

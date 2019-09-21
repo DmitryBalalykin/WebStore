@@ -12,6 +12,7 @@ using WebStore.DomainNew.Entities;
 using WebStore.Infrastucture.Implementations;
 using WebStore.Infrastucture.Interfaces;
 using WebStore.Interface.Api;
+using WebStore.Interface.Services;
 using WebStore.ViewModel;
 
 namespace WebStore
@@ -65,6 +66,10 @@ namespace WebStore
             //        options.AccessDeniedPath = "/Account/AccessDenied";
             //        options.SlidingExpiration = true;
             //    });
+
+            //Насторойки для корзины товаров
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ICartService, CookeCartService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
