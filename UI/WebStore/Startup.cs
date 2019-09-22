@@ -9,11 +9,12 @@ using System;
 using WebStore.Clients.Value;
 using WebStore.DAL;
 using WebStore.DomainNew.Entities;
-using WebStore.Infrastucture.Implementations;
-using WebStore.Infrastucture.Interfaces;
 using WebStore.Interface.Api;
 using WebStore.Interface.Services;
 using WebStore.ViewModel;
+using WebStore.Infrastucture;
+using WebStore.Infrastucture.Implementations;
+using WebStore.Infrastucture.Interfaces;
 
 namespace WebStore
 {
