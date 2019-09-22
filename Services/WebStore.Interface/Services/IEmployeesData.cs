@@ -40,5 +40,11 @@ namespace WebStore.Infrastucture.Interfaces
         /// </summary>
         /// <param name="id"></param>
         void Delete(int id);
+
+        /// <summary>
+        /// Изменить сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        EmployeeView UpDateEmployee(int id, EmployeeView employeeView);
     }
 }

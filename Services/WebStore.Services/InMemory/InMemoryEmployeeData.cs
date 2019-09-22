@@ -62,5 +62,23 @@ namespace WebStore.Infrastucture.Implementations
         {
             return _employees.FirstOrDefault(x => x.Id == id);
         }
+
+        public EmployeeView UpDateEmployee(int id, EmployeeView employeeView)
+        {
+            if (employeeView is null)
+                throw new ArgumentNullException(nameof(employeeView));
+
+            var db_employee = GetById(id);
+
+            if (db_employee is null)
+                throw new InvalidOperationException($"Сотрудник с Id:{id} не найден");
+
+            db_employee.Age = employeeView.Age;
+            db_employee.FirstName = employeeView.FirstName;
+            db_employee.Id = employeeView.Id;
+            db_employee.SurName = employeeView.SurName;
+
+            return db_employee;
+        }
     }
 }

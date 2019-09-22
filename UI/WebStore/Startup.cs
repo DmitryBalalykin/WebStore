@@ -15,6 +15,7 @@ using WebStore.ViewModel;
 using WebStore.Infrastucture;
 using WebStore.Infrastucture.Implementations;
 using WebStore.Infrastucture.Interfaces;
+using WebStore.Clients.Employees;
 
 namespace WebStore
 {
@@ -32,9 +33,11 @@ namespace WebStore
         {
             services.AddMvc();
 
-            services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
+            //services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
+            services.AddSingleton<IEmployeesData, EmployeesClient>();
             services.AddSingleton<IProductService, InMemoryProductService>();
             services.AddScoped<IProductService, SqlProductService>();
+            services.AddScoped<ICartService, CookeCartService>();
 
             services.AddDbContext<WebStoreContext>(optionsAction: options => options.UseSqlServer(
                 Configuration.GetConnectionString(name: "DefaultConnection")));
@@ -70,7 +73,6 @@ namespace WebStore
 
             //Насторойки для корзины товаров
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<ICartService, CookeCartService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

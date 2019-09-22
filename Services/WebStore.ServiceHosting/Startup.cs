@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WebStore.DAL;
+using WebStore.Infrastucture.Implementations;
+using WebStore.Infrastucture.Interfaces;
+using WebStore.Interface.Services;
 
 namespace WebStore.ServiceHosting
 {
@@ -29,6 +33,13 @@ namespace WebStore.ServiceHosting
         {
             services.AddDbContext<WebStoreContext>(optionsAction: options => options.UseSqlServer(
     Configuration.GetConnectionString(name: "DefaultConnection")));
+
+            services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
+            services.AddSingleton<IProductService, InMemoryProductService>();
+            services.AddScoped<IProductService, SqlProductService>();
+            services.AddScoped<ICartService, CookeCartService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
