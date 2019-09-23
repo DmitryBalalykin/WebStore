@@ -16,6 +16,7 @@ using WebStore.Infrastucture;
 using WebStore.Infrastucture.Implementations;
 using WebStore.Infrastucture.Interfaces;
 using WebStore.Clients.Employees;
+using WebStore.Clients.Products;
 
 namespace WebStore
 {
@@ -35,8 +36,12 @@ namespace WebStore
 
             //services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
             services.AddSingleton<IEmployeesData, EmployeesClient>();
-            services.AddSingleton<IProductService, InMemoryProductService>();
-            services.AddScoped<IProductService, SqlProductService>();
+
+            //services.AddScoped<IProductService, SqlProductService>();
+            //services.AddSingleton<IProductService, InMemoryProductService>();
+            services.AddSingleton<IProductService, ProductsClient>();
+
+
             services.AddScoped<ICartService, CookeCartService>();
 
             services.AddDbContext<WebStoreContext>(optionsAction: options => options.UseSqlServer(

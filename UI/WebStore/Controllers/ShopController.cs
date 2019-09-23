@@ -40,7 +40,7 @@ namespace WebStore.Controllers
                     ImageUrl = p.ImageUrl,
                     Price = p.Price,
                     BrandName = p.Brand?.Name ?? String.Empty,
-                    SectionName = p.Section?.Name ?? String.Empty
+
                 }).OrderBy(p => p.Order).ToList() //Упорядочили -OrderBy() и привели к списку-ToList()
             };
 
@@ -53,7 +53,6 @@ namespace WebStore.Controllers
             if (product == null)
                 return NotFound();
 
-
             return View(new ProductViewModel()
             {
                 Id = product.Id,
@@ -62,7 +61,7 @@ namespace WebStore.Controllers
                 Price = product.Price,
                 Order = product.Order,
                 BrandName = product.Brand?.Name ?? String.Empty,
-                SectionName = product.Section?.Name ?? String.Empty
+
             });
         }
 
@@ -70,7 +69,5 @@ namespace WebStore.Controllers
         {
             return View();
         }
-
-
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebStore.DomainNew.DTO;
 using WebStore.DomainNew.Entities;
 using WebStore.DomainNew.Filters;
 using WebStore.Infrastucture.Interfaces;
@@ -401,9 +402,23 @@ namespace WebStore.Infrastucture.Implementations
             return _sections;
         }
 
-        public IEnumerable<Product> GetProducts(ProductFilter filter)
+        public IEnumerable<ProductDTO> GetProducts(ProductFilter filter)
         {
             var products = _products;
+
+            if (filter is null) return products.Select(p => new ProductDTO 
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Order = p.Order,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand is null ? null : new BrandDTO
+                {
+                    Id = p.Brand.Id,
+                    Name = p.Brand.Name
+                }
+            });
 
             if (filter.SectionId.HasValue)//Если фильтр .HesValue-задан
                 products = products.Where(x => x.SectionId == filter.SectionId.Value).ToList();
@@ -411,17 +426,55 @@ namespace WebStore.Infrastucture.Implementations
             if (filter.BrandId.HasValue)
                 products = products.Where(x => x.BrandId == filter.BrandId.Value).ToList();
 
-            return products;
+            return products.Select(p=> new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Order = p.Order,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand is null ? null : new BrandDTO
+                {
+                    Id = p.Brand.Id,
+                    Name = p.Brand.Name
+                }
+            });
         }
 
-        public IEnumerable<Product> GetProducts()
+        public IEnumerable<ProductDTO> GetProducts()
         {
-            return _products;
+            var products = _products;
+
+            return products.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Order = p.Order,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand is null ? null : new BrandDTO
+                {
+                    Id = p.Brand.Id,
+                    Name = p.Brand.Name
+                }
+            });
         }
 
-        public Product GetProductById(int id)
+        public ProductDTO GetProductById(int id)
         {
-            return _products.FirstOrDefault(x => x.Id == id);
+            var product = _products.FirstOrDefault(x => x.Id == id);
+            return new ProductDTO
+            {Id =product.Id,
+            Name = product.Name,
+            Order = product.Order,
+            Price = product.Price,
+            ImageUrl = product.ImageUrl,
+                Brand = product.Brand is null ? null : new BrandDTO
+                {
+                    Id = product.Brand.Id,
+                    Name = product.Brand.Name
+                }
+            };
         }
     }
 }

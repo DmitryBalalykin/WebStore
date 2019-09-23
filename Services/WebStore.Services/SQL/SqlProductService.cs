@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.DAL;
+using WebStore.DomainNew.DTO;
 using WebStore.DomainNew.Entities;
 using WebStore.DomainNew.Filters;
 using WebStore.Infrastucture.Interfaces;
@@ -24,7 +25,7 @@ namespace WebStore.Infrastucture.Implementations
             return _context.Brands.ToList();
         }
 
-        public IEnumerable<Product> GetProducts(ProductFilter filter)
+        public IEnumerable<ProductDTO> GetProducts(ProductFilter filter)
         {
             var products = _context.Products
                 .Include(p => p.Brand)
@@ -37,12 +38,46 @@ namespace WebStore.Infrastucture.Implementations
             if (filter.BrandId.HasValue)
                 products = products.Where(x => x.BrandId == filter.BrandId.Value);
 
-            return products.ToList();
+            return products
+                .ToList()
+                .Select(p => new ProductDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Order = p.Order,
+                    Price = p.Price,
+                    ImageUrl = p.ImageUrl,
+                    Brand = p.Brand is null ? null : new BrandDTO
+                    {
+                        Id = p.Brand.Id,
+                        Name = p.Brand.Name
+                    }
+                });
+
         }
 
-        public IEnumerable<Product> GetProducts()
+        public IEnumerable<ProductDTO> GetProducts()
         {
-            return _context.Products.ToList();
+            var products = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Section)
+                .AsQueryable();
+
+            return products
+                .ToList()
+                .Select(p => new ProductDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Order = p.Order,
+                    Price = p.Price,
+                    ImageUrl = p.ImageUrl,
+                    Brand = p.Brand is null ? null : new BrandDTO
+                    {
+                        Id = p.Brand.Id,
+                        Name = p.Brand.Name
+                    }
+                });
         }
 
         public IEnumerable<Section> GetSections()
@@ -50,12 +85,25 @@ namespace WebStore.Infrastucture.Implementations
             return _context.Sections.ToList();
         }
 
-        public Product GetProductById(int id)
+        public ProductDTO GetProductById(int id)
         {
-            return _context.Products
-                .Include(p=> p.Brand)
-                .Include(p=>p.Section)
-                .FirstOrDefault(p => p.Id == id);
+           var p = _context.Products
+                .Include(x => x.Brand)
+                .Include(x => x.Section)
+                .FirstOrDefault(x => x.Id == id);
+            return  new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Order = p.Order,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand is null ? null : new BrandDTO
+                {
+                    Id = p.Brand.Id,
+                    Name = p.Brand.Name
+                }
+            };
         }
     }
 }
