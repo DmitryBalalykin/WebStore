@@ -13,7 +13,7 @@ namespace WebStore.Infrastucture.Interfaces
         /// <summary>
         /// Получение списка брендов
         /// </summary>
-        IEnumerable<Brand> GetBrands();
+        IEnumerable<BrandDTO> GetBrands();
 
         /// <summary>
         /// Получение списка секций

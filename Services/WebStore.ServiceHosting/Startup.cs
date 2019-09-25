@@ -16,6 +16,7 @@ using WebStore.DAL;
 using WebStore.Infrastucture.Implementations;
 using WebStore.Infrastucture.Interfaces;
 using WebStore.Interface.Services;
+using WebStore.Services.SQL;
 
 namespace WebStore.ServiceHosting
 {
@@ -37,6 +38,7 @@ namespace WebStore.ServiceHosting
             services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
             services.AddSingleton<IProductService, InMemoryProductService>();
             services.AddScoped<IProductService, SqlProductService>();
+            services.AddScoped<IOrdersService, SqlOrderService>();
             services.AddScoped<ICartService, CookeCartService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

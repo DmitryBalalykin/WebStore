@@ -24,7 +24,7 @@ namespace WebStore.ServiceHosting.Controllers
         }
 
         [HttpGet("brands")]
-        public IEnumerable<Brand> GetBrands()
+        public IEnumerable<BrandDTO> GetBrands()
         {
             return _productService.GetBrands();
         }

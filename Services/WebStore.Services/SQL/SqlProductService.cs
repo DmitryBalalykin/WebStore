@@ -20,7 +20,7 @@ namespace WebStore.Infrastucture.Implementations
             _context = context;
         }
 
-        public IEnumerable<Brand> GetBrands()
+        public IEnumerable<BrandDTO> GetBrands()
         {
             return _context.Brands.ToList();
         }

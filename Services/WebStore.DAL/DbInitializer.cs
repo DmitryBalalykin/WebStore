@@ -7,6 +7,7 @@ using System.Text;
 using WebStore.DomainNew.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
+using WebStore.DomainNew.DTO;
 
 namespace WebStore.DAL
 {
@@ -22,39 +23,39 @@ namespace WebStore.DAL
             }
 
             //Заполнение БД
-            var _brands = new List<Brand>
+            var _brands = new List<BrandDTO>
             {
-                new Brand
+                new BrandDTO
                 {
                     Id =1,
                     Name ="ACNE",
                     Order = 0
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 2,
                     Name = "Grüne Erde",
                     Order =1,
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 3,
                     Name = "Albiro",
                     Order =2,
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 5,
                     Name = "Ronhill",
                     Order =3,
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 6,
                     Name = "Boudestijn",
                     Order =4,
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 7,
                     Name = "Rösch creative culture",
@@ -306,9 +307,9 @@ namespace WebStore.DAL
                 trans.Commit();
             }
 
-            var _products = new List<Product>
+            var _products = new List<ProductDTO>
             {
-                new Product
+                new ProductDTO
                 {
                     Id=1,
                     Name = "Easy Polo Black Edition",
@@ -318,7 +319,7 @@ namespace WebStore.DAL
                     SectionId = 24,
                     ImageUrl = "product12.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=2,
                     Name = "Easy Polo Black Edition",
@@ -328,7 +329,7 @@ namespace WebStore.DAL
                     SectionId = 24,
                     ImageUrl = "product11.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=3,
                     Name = "Easy Polo Black Edition",
@@ -338,7 +339,7 @@ namespace WebStore.DAL
                     SectionId = 2,
                     ImageUrl = "product10.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=4,
                     Name = "Easy Polo Black Edition",
@@ -348,7 +349,7 @@ namespace WebStore.DAL
                     SectionId = 2,
                     ImageUrl = "product9.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=5,
                     Name = "Easy Polo Black Edition",
@@ -358,7 +359,7 @@ namespace WebStore.DAL
                     SectionId = 4,
                     ImageUrl = "product8.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=6,
                     Name = "Easy Polo Black Edition",
@@ -369,7 +370,7 @@ namespace WebStore.DAL
                     ImageUrl = "product1.jpg",
                     StatusHome =true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=7,
                     Name = "Easy Polo Black Edition",
@@ -380,7 +381,7 @@ namespace WebStore.DAL
                     ImageUrl = "product2.jpg",
                     StatusHome =true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=8,
                     Name = "Easy Polo Black Edition",
@@ -391,7 +392,7 @@ namespace WebStore.DAL
                     ImageUrl = "product3.jpg",
                     StatusHome =true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=9,
                     Name = "Easy Polo Black Edition",
@@ -402,7 +403,7 @@ namespace WebStore.DAL
                     ImageUrl = "product4.jpg",
                     StatusNew = true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=10,
                     Name = "Easy Polo Black Edition",
@@ -413,7 +414,7 @@ namespace WebStore.DAL
                     ImageUrl = "product5.jpg",
                     StatusSale = true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=11,
                     Name = "Easy Polo Black Edition",

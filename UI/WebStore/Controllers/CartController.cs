@@ -3,23 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebStore.DomainNew.ViewModel;
 using WebStore.Interface.Services;
 
 namespace WebStore.Controllers
 {
     public class CartController : Controller
     {
+        private readonly IOrdersService _ordersService;
         private readonly ICartService _cartService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, IOrdersService ordersService)
         {
+            _ordersService = ordersService;
             _cartService = cartService;
         }
 
 
         public IActionResult Cart()
         {
-            return View("Cart", _cartService.TransformCart());
+            var model = new OrderInfo
+            {
+                CartViewModel = _cartService.TransformCart(),
+                OrderViewModel = new OrderViewModel()
+            };
+
+            return View(model);
         }
 
         public IActionResult DecrementFromCart(int id)
@@ -45,6 +54,35 @@ namespace WebStore.Controllers
         {
             _cartService.RemoveFromCart(id);
             return RedirectToAction("Cart");
+        }
+
+        /// <summary>
+        /// Создание заказов
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult ChekOut(OrderViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var orderResult = _ordersService.CreateOrder(model, _cartService.TransformCart(), User.Identity.Name);
+
+                _cartService.RemoveAll();
+                return RedirectToAction("OrderConfirmed", new { orderResult.Id });
+            }
+
+            var detailsModel = new OrderInfo()
+            {
+                CartViewModel = _cartService.TransformCart(),
+                OrderViewModel = model
+            };
+
+            return View("Cart", detailsModel);
+        }
+
+        public IActionResult OrderConfirmed(int id)
+        {
+            ViewBag.Order = id;
+            return View();
         }
     }
 }
