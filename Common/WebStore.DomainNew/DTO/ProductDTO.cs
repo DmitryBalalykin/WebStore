@@ -20,6 +20,10 @@ namespace WebStore.DomainNew.DTO
 
         public BrandDTO Brand { get; set; }
 
+        public int SectionId { get; set; }
+
+        public int? BrandId { get; set; }
+
         public bool? StatusHome { get; set; }
 
         public bool? StatusNew { get; set; }
