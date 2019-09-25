@@ -36,7 +36,7 @@ namespace WebStore.Controllers
                     Name = order.Name,
                     Address = order.Address,
                     Phone = order.Phone,
-                    TotalSum = order.OrderItems.Sum(o => o.Price * o.Quantity)
+                    TotalSum = order.orderItems.Sum(o => o.Price * o.Quantity)
                 });
             }
 
