@@ -1,13 +1,10 @@
 ﻿
 @if (User.Identity.IsAuthenticated)
 {
-    <span>Здравствуйте, <a asp-action="Index" asp-controller="Profile"> @User.Identity.Name</a></span>
-    <form method="post" asp-controller="Account" asp-action="Logout" asp-antiforgery="true">
-        <input type="submit" value="Выход" class="fa fa-lock" />
-    </form>
+    <li><a asp-action="Index" asp-controller="Home"><i class="fa fa-user"></i>Выход</a></li>
 }
 else
 {
-    <li><a asp-controller="Account" asp-action="Login"><i class="fa fa-lock"></i> Login</a></li>
-    <li><a asp-controller="Account" asp-action="Register"><i class="fa fa-lock"></i> Register</a></li>
+    <li><a asp-controller="Account" asp-action="Login"><i class="fa fa-lock"></i> Войти</a></li>
+    <li><a asp-controller="Account" asp-action="Register"><i class="fa fa-lock"></i> Зарегистрироваться</a></li>
 }

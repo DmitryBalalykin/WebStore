@@ -61,7 +61,7 @@ namespace WebStore.Controllers
         /// Создание заказов
         /// </summary>
         /// <returns></returns>
-        public IActionResult ChekOut(OrderViewModel model)
+        public IActionResult Checkout(OrderViewModel model)
         {
             if (ModelState.IsValid)
             {

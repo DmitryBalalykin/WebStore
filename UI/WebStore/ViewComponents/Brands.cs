@@ -32,7 +32,7 @@ namespace WebStore.ViewComponents
                 Id = x.Id,
                 Name = x.Name,
                 Order = x.Order,
-                ProductCount = 0
+                ProductCount =0
             }).OrderBy(x=>x.Order) //Сортировка по порядку
                 .ToList();
         }

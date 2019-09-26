@@ -38,7 +38,7 @@ namespace WebStore.Clients.Products
 
         public IEnumerable<ProductDTO> GetProducts()
         {
-            return Get<List<ProductDTO>>($"{_ServiceAddress}/productDTO");
+            return Get<List<ProductDTO>>($"{_ServiceAddress}/products");
         }
 
         public IEnumerable<Section> GetSections()

@@ -1,7 +1,7 @@
 ﻿@model WebStore.DomainNew.ViewModel.OrderViewModel
 
 
-<form method="post" asp-antiforgery="true" asp-action="CheckOut">
+<form method="post" asp-antiforgery="true" asp-action="OrderConfirmed">
     <div class="col-sm-6">
         <input asp-for="Name" placeholder="@nameof(Model.Name)" />
         <span asp-validation-for="Name" class="text-danger"></span>

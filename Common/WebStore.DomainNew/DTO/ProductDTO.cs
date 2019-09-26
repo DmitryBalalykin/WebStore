@@ -15,7 +15,6 @@ namespace WebStore.DomainNew.DTO
 
         public int? BrandId { get; set; }
 
-
         public string ImageUrl { get; set; }
 
         public decimal Price { get; set; }
@@ -25,8 +24,6 @@ namespace WebStore.DomainNew.DTO
         public bool? StatusNew { get; set; }
 
         public bool? StatusSale { get; set; }
-
-
 
         public BrandDTO Brand { get; set; }
 

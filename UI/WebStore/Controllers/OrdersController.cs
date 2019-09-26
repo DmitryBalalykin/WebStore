@@ -10,7 +10,8 @@ using WebStore.Interface.Services;
 
 namespace WebStore.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api / orders")]
     [ApiController, Produces("application/json")]
     public class OrdersController : ControllerBase,IOrdersService
     {
@@ -33,7 +34,7 @@ namespace WebStore.Controllers
             return _ordersService.GetOrderById(id);
         }
 
-        [HttpGet("User/{UserName}")]
+        [HttpGet("user/{UserName}")]
         public IEnumerable<OrderDTO> GetUserOrders(string userName)
         {
             return _ordersService.GetUserOrders(userName);

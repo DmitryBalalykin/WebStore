@@ -65,9 +65,6 @@ namespace WebStore.Controllers
             });
         }
 
-        public IActionResult Checkout()
-        {
-            return View();
-        }
+
     }
 }
