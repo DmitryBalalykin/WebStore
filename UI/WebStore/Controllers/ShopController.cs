@@ -38,24 +38,34 @@ namespace WebStore.Controllers
                     Name = p.Name,
                     Order = p.Order,
                     ImageUrl = p.ImageUrl,
-                    Price = p.Price
+                    Price = p.Price,
+                    BrandName = p.Brand?.Name ?? String.Empty,
+
                 }).OrderBy(p => p.Order).ToList() //Упорядочили -OrderBy() и привели к списку-ToList()
             };
 
             return View(model);
         }
 
-        public IActionResult ProductDetails()
+        public IActionResult ProductDetails(int id)
         {
-            return View();
+            var product = _productService.GetProductById(id);
+            if (product == null)
+                return NotFound();
+
+            return View(new ProductViewModel()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                ImageUrl =product.ImageUrl,
+                Price = product.Price,
+                Order = product.Order,
+                BrandName = product.Brand?.Name ?? String.Empty,
+
+            });
         }
 
         public IActionResult Checkout()
-        {
-            return View();
-        }
-
-        public IActionResult Cart()
         {
             return View();
         }

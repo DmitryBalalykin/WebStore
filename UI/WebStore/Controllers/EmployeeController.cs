@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Infrastucture.Interfaces;
 using WebStore.ViewModel;
 
 namespace WebStore.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         private IEmployeesData _employees;
@@ -17,6 +19,7 @@ namespace WebStore.Controllers
             _employees = employees;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View(_employees.GetAll());
@@ -33,6 +36,7 @@ namespace WebStore.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Admin")]
         public IActionResult Edit(int? id)
         {
             if (!id.HasValue)
@@ -47,6 +51,7 @@ namespace WebStore.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(EmployeeView model)
         {
             if (model.Id > 0)
@@ -68,6 +73,7 @@ namespace WebStore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             _employees.Delete(id);

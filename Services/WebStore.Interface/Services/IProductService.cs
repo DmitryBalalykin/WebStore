@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebStore.DomainNew.DTO;
 using WebStore.DomainNew.Entities;
 using WebStore.DomainNew.Filters;
 
@@ -12,7 +13,7 @@ namespace WebStore.Infrastucture.Interfaces
         /// <summary>
         /// Получение списка брендов
         /// </summary>
-        IEnumerable<Brand> GetBrands();
+        IEnumerable<BrandDTO> GetBrands();
 
         /// <summary>
         /// Получение списка секций
@@ -23,12 +24,19 @@ namespace WebStore.Infrastucture.Interfaces
         /// Получение списка продуктов
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Product> GetProducts (ProductFilter filter);
+        IEnumerable<ProductDTO> GetProducts (ProductFilter filter);
 
         /// <summary>
         /// Получение списка продуктов без фильтра
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Product> GetProducts();
+        IEnumerable<ProductDTO> GetProducts();
+
+        /// <summary>
+        /// Получить товар по Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        ProductDTO GetProductById(int id);
     }
 }

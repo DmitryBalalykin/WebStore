@@ -4,12 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WebStore.DAL;
+using WebStore.Infrastucture.Implementations;
+using WebStore.Infrastucture.Interfaces;
+using WebStore.Interface.Services;
+using WebStore.Services.SQL;
 
 namespace WebStore.ServiceHosting
 {
@@ -25,6 +32,17 @@ namespace WebStore.ServiceHosting
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<WebStoreContext>(optionsAction: options => options.UseSqlServer(
+    Configuration.GetConnectionString(name: "DefaultConnection")));
+
+            services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
+            services.AddSingleton<IProductService, InMemoryProductService>();
+            services.AddScoped<IProductService, SqlProductService>();
+            services.AddScoped<IOrdersService, SqlOrderService>();
+            services.AddScoped<ICartService, CookeCartService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

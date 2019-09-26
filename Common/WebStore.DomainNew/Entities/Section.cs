@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using WebStore.DomainNew.DTO;
 using WebStore.DomainNew.Entities.Base;
 using WebStore.DomainNew.Entities.Base.Interface;
 
@@ -17,7 +18,7 @@ namespace WebStore.DomainNew.Entities
 
         public int Order { get; set; }
 
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<ProductDTO> Products { get; set; }
 
         [ForeignKey(name:"ParentId")]
         public virtual Section ParentSection { get; set; }

@@ -9,10 +9,16 @@ using System;
 using WebStore.Clients.Value;
 using WebStore.DAL;
 using WebStore.DomainNew.Entities;
+using WebStore.Interface.Api;
+using WebStore.Interface.Services;
+using WebStore.ViewModel;
+using WebStore.Infrastucture;
 using WebStore.Infrastucture.Implementations;
 using WebStore.Infrastucture.Interfaces;
-using WebStore.Interface.Api;
-using WebStore.ViewModel;
+using WebStore.Clients.Employees;
+using WebStore.Clients.Products;
+using WebStore.Services.SQL;
+using WebStore.Clients.Orders;
 
 namespace WebStore
 {
@@ -30,15 +36,24 @@ namespace WebStore
         {
             services.AddMvc();
 
-            services.AddSingleton<IProductService, InMemoryProductService>();
-            services.AddScoped<IProductService, SqlProductService>();
+            //services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
+            services.AddSingleton<IEmployeesData, EmployeesClient>();
+
+            //services.AddScoped<IProductService, SqlProductService>();
+            //services.AddSingleton<IProductService, InMemoryProductService>();
+            services.AddSingleton<IProductService, ProductsClient>();
+
+            //services.AddScoped<IOrdersService, SqlOrderService>();
+            services.AddScoped<IOrdersService, OrdersClient>();
+
+            services.AddScoped<ICartService, CookeCartService>();
 
             services.AddDbContext<WebStoreContext>(optionsAction: options => options.UseSqlServer(
                 Configuration.GetConnectionString(name: "DefaultConnection")));
+
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<WebStoreContext>()
-                .AddDefaultTokenProviders()
-                ;
+                .AddDefaultTokenProviders();
 
             services.AddTransient<IValueService, ValuesClient>();
             //    services.Configure<IdentityOptions>(options =>
@@ -64,6 +79,9 @@ namespace WebStore
             //        options.AccessDeniedPath = "/Account/AccessDenied";
             //        options.SlidingExpiration = true;
             //    });
+
+            //Насторойки для корзины товаров
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,8 +98,13 @@ namespace WebStore
 
             app.UseAuthentication();
 
-            app.UseMvc(routes=>
+            app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                  name: "areas",
+                  template: "{area:exists}/{controller=Admin}/{action=Index}/{id?}"
+                );
+
                 routes.MapRoute(
                    name: "default",
                    template: "{controller=Home}/{action=Index}/{Id?}");

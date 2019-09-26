@@ -1,19 +1,31 @@
 ﻿@model  IEnumerable<WebStore.ViewModel.EmployeeView>
-
+@{ var isAdmin = User.IsInRole("Admin");
+        }
 
 
     <div class="container">
-        <hr />
+        @if (isAdmin)
+        {
         <a asp-action="Edit" class="btn btn-success">Добавить</a>
+        }
+        <hr />
         <hr />
         <table class="table">
             @foreach(var item in Model){
             <tr>
-                <td>@Html.ActionLink(item.FirstName, actionName:"Details", routeValues: new { id =item.Id} )</td>
-                <td><a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a></td>
+                <td>@Html.ActionLink(item.FirstName, actionName: "Details", routeValues: new { id = item.Id })</td>
+                @if (isAdmin)
+                {
+                    <td><a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a></td>
+                }
+
                 <td>@item.SurName</td>
                 <td>@item.Age</td>
+                @if (isAdmin)
+                {
                 <td><a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-dedent"></i></a></td>
+
+                }
                 <td></td>
             </tr>
             }

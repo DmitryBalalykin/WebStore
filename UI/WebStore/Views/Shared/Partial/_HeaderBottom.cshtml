@@ -18,9 +18,8 @@
                             <a href="#">Shop<i class="fa fa-angle-down"></i></a>
                             <ul role="menu" class="sub-menu">
                                 <li><a asp-controller="Shop" asp-action="Product">Products</a></li>
-                                <li><a asp-controller="Shop" asp-action="ProductDetails">Product Details</a></li>
                                 <li><a asp-controller="Shop" asp-action="Checkout">Checkout</a></li>
-                                <li><a asp-controller="Shop" asp-action="Cart">Cart</a></li>
+                                <li><a asp-controller="Cart" asp-action="Cart">Cart</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -32,6 +31,7 @@
                         </li>
                         <li><a asp-controller="Home" asp-action="MyNotFound">404</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        <li><a asp-controller="Employee" asp-action="Index">Employees</a></li>
                         <li><a asp-controller="WebApiTest" asp-action="Index">WebTestApi</a></li>
                     </ul>
                 </div>

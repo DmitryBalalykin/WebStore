@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebStore.DomainNew.DTO;
 using WebStore.DomainNew.Entities;
 using WebStore.DomainNew.Filters;
 using WebStore.Infrastucture.Interfaces;
@@ -10,47 +11,47 @@ namespace WebStore.Infrastucture.Implementations
 {
     public class InMemoryProductService : IProductService
     {
-        private readonly List<Brand> _brands;
+        private readonly List<BrandDTO> _brands;
 
         private readonly List<Section> _sections;
 
-        private readonly List<Product> _products;
+        private readonly List<ProductDTO> _products;
 
         public InMemoryProductService()
         {
-            _brands = new List<Brand>
+            _brands = new List<BrandDTO>
             {
-                new Brand
+                new BrandDTO
                 {
                     Id =1,
                     Name ="ACNE",
                     Order = 0
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 2,
                     Name = "Grüne Erde",
                     Order =1,
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 3,
                     Name = "Albiro",
                     Order =2,
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 5,
                     Name = "Ronhill",
                     Order =3,
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 6,
                     Name = "Boudestijn",
                     Order =4,
                 },
-                new Brand
+                new BrandDTO
                 {
                     Id = 7,
                     Name = "Rösch creative culture",
@@ -270,9 +271,9 @@ namespace WebStore.Infrastucture.Implementations
                     ParentId=null,
                 },
             };
-            _products = new List<Product>
+            _products = new List<ProductDTO>
             {
-                new Product
+                new ProductDTO
                 {
                     Id=1,
                     Name = "Easy Polo Black Edition",
@@ -282,7 +283,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 24,
                     ImageUrl = "product12.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=2,
                     Name = "Easy Polo Black Edition",
@@ -292,7 +293,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 24,
                     ImageUrl = "product11.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=3,
                     Name = "Easy Polo Black Edition",
@@ -302,7 +303,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 2,
                     ImageUrl = "product10.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=4,
                     Name = "Easy Polo Black Edition",
@@ -312,7 +313,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 2,
                     ImageUrl = "product9.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=5,
                     Name = "Easy Polo Black Edition",
@@ -322,7 +323,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 4,
                     ImageUrl = "product8.jpg"
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=6,
                     Name = "Easy Polo Black Edition",
@@ -333,7 +334,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product1.jpg",
                     StatusHome =true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=7,
                     Name = "Easy Polo Black Edition",
@@ -344,7 +345,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product2.jpg",
                     StatusHome =true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=8,
                     Name = "Easy Polo Black Edition",
@@ -355,7 +356,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product3.jpg",
                     StatusHome =true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=9,
                     Name = "Easy Polo Black Edition",
@@ -366,7 +367,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product4.jpg",
                     StatusNew = true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=10,
                     Name = "Easy Polo Black Edition",
@@ -377,7 +378,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product5.jpg",
                     StatusSale = true
                 },
-                new Product
+                new ProductDTO
                 {
                     Id=11,
                     Name = "Easy Polo Black Edition",
@@ -391,7 +392,7 @@ namespace WebStore.Infrastucture.Implementations
             };
         }
 
-        public IEnumerable<Brand> GetBrands()
+        public IEnumerable<BrandDTO> GetBrands()
         {
             return _brands;
         }
@@ -401,9 +402,23 @@ namespace WebStore.Infrastucture.Implementations
             return _sections;
         }
 
-        public IEnumerable<Product> GetProducts(ProductFilter filter)
+        public IEnumerable<ProductDTO> GetProducts(ProductFilter filter)
         {
             var products = _products;
+
+            if (filter is null) return products.Select(p => new ProductDTO 
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Order = p.Order,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand is null ? null : new BrandDTO
+                {
+                    Id = p.Brand.Id,
+                    Name = p.Brand.Name
+                }
+            });
 
             if (filter.SectionId.HasValue)//Если фильтр .HesValue-задан
                 products = products.Where(x => x.SectionId == filter.SectionId.Value).ToList();
@@ -411,12 +426,55 @@ namespace WebStore.Infrastucture.Implementations
             if (filter.BrandId.HasValue)
                 products = products.Where(x => x.BrandId == filter.BrandId.Value).ToList();
 
-            return products;
+            return products.Select(p=> new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Order = p.Order,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand is null ? null : new BrandDTO
+                {
+                    Id = p.Brand.Id,
+                    Name = p.Brand.Name
+                }
+            });
         }
 
-        public IEnumerable<Product> GetProducts()
+        public IEnumerable<ProductDTO> GetProducts()
         {
-            return _products;
+            var products = _products;
+
+            return products.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Order = p.Order,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Brand = p.Brand is null ? null : new BrandDTO
+                {
+                    Id = p.Brand.Id,
+                    Name = p.Brand.Name
+                }
+            });
+        }
+
+        public ProductDTO GetProductById(int id)
+        {
+            var product = _products.FirstOrDefault(x => x.Id == id);
+            return new ProductDTO
+            {Id =product.Id,
+            Name = product.Name,
+            Order = product.Order,
+            Price = product.Price,
+            ImageUrl = product.ImageUrl,
+                Brand = product.Brand is null ? null : new BrandDTO
+                {
+                    Id = product.Brand.Id,
+                    Name = product.Brand.Name
+                }
+            };
         }
     }
 }

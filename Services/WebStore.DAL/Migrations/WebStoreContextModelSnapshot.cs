@@ -129,6 +129,50 @@ namespace WebStore.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebStore.DomainNew.DTO.BrandDTO", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BrandDTO");
+                });
+
+            modelBuilder.Entity("WebStore.DomainNew.DTO.ProductDTO", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BrandId");
+
+                    b.Property<string>("ImageUrl");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Order");
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<int>("SectionId");
+
+                    b.Property<bool?>("StatusHome");
+
+                    b.Property<bool?>("StatusNew");
+
+                    b.Property<bool?>("StatusSale");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("ProductDTO");
+                });
+
             modelBuilder.Entity("WebStore.DomainNew.Entities.Brand", b =>
                 {
                     b.Property<int>("Id")
@@ -142,6 +186,52 @@ namespace WebStore.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
+                });
+
+            modelBuilder.Entity("WebStore.DomainNew.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Phone");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("WebStore.DomainNew.Entities.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("OrderId");
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<int?>("ProductId");
+
+                    b.Property<int>("Quantity");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("WebStore.DomainNew.Entities.Product", b =>
@@ -290,6 +380,31 @@ namespace WebStore.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebStore.DomainNew.DTO.ProductDTO", b =>
+                {
+                    b.HasOne("WebStore.DomainNew.DTO.BrandDTO", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId");
+                });
+
+            modelBuilder.Entity("WebStore.DomainNew.Entities.Order", b =>
+                {
+                    b.HasOne("WebStore.DomainNew.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("WebStore.DomainNew.Entities.OrderItem", b =>
+                {
+                    b.HasOne("WebStore.DomainNew.Entities.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("WebStore.DomainNew.DTO.ProductDTO", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("WebStore.DomainNew.Entities.Product", b =>

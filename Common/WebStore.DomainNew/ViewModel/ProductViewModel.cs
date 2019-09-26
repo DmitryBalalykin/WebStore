@@ -26,6 +26,10 @@ namespace WebStore.ViewModel
 
         public decimal Price { get; set; }
 
+        public string BrandName { get; set; }
+
+        public string SectionName { get; set; }
+
         /// <summary>
         /// Категория продуктов
         /// </summary>
@@ -41,5 +45,6 @@ namespace WebStore.ViewModel
         public List<ProductViewModel> NewStatus { get; set; }
 
         public List<ProductViewModel> SaleStatus { get; set; }
+
     }
 }
