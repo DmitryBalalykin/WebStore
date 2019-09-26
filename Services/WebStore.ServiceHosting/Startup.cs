@@ -37,10 +37,6 @@ namespace WebStore.ServiceHosting
             services.AddDbContext<WebStoreContext>(optionsAction: options => options.UseSqlServer(
     Configuration.GetConnectionString(name: "DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<WebStoreContext>()
-    .AddDefaultTokenProviders();
-
             services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
             services.AddSingleton<IProductService, InMemoryProductService>();
             services.AddScoped<IProductService, SqlProductService>();

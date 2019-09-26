@@ -20,6 +20,7 @@ using WebStore.Clients.Products;
 using WebStore.Services.SQL;
 using WebStore.Clients.Orders;
 
+
 namespace WebStore
 {
     public class Startup
@@ -36,14 +37,8 @@ namespace WebStore
         {
             services.AddMvc();
 
-            //services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
             services.AddSingleton<IEmployeesData, EmployeesClient>();
-
-            //services.AddScoped<IProductService, SqlProductService>();
-            //services.AddSingleton<IProductService, InMemoryProductService>();
             services.AddSingleton<IProductService, ProductsClient>();
-
-            //services.AddScoped<IOrdersService, SqlOrderService>();
             services.AddScoped<IOrdersService, OrdersClient>();
 
             services.AddScoped<ICartService, CookeCartService>();
@@ -56,29 +51,6 @@ namespace WebStore
                 .AddDefaultTokenProviders();
 
             services.AddTransient<IValueService, ValuesClient>();
-            //    services.Configure<IdentityOptions>(options =>
-            //    {
-            //        //Password settings
-            //        options.Password.RequiredLength = 6;
-
-            //        //Lockout settings
-            //        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-            //        options.Lockout.MaxFailedAccessAttempts = 10;
-            //        options.Lockout.AllowedForNewUsers = true;
-
-            //        //User settings
-            //        options.User.RequireUniqueEmail = true;
-            //    });
-
-            //    services.ConfigureApplicationCookie(options =>
-            //    {
-            //        options.Cookie.HttpOnly = true;
-            //        options.Cookie.Expiration = TimeSpan.FromDays(150);
-            //        options.LoginPath = "/Account/Login";
-            //        options.LogoutPath = "/Account/Logout";
-            //        options.AccessDeniedPath = "/Account/AccessDenied";
-            //        options.SlidingExpiration = true;
-            //    });
 
             //Насторойки для корзины товаров
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
