@@ -34,7 +34,7 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            logger.LogInformation("Пользователь{0} вошел в систему");
+            logger.LogInformation("Пользователь{0} вошел в систему", model.UserName);
             var loginResult = await _signInManager.PasswordSignInAsync(
                 model.UserName, 
                 model.Password, 
@@ -43,7 +43,7 @@ namespace WebStore.Controllers
 
             if (!loginResult.Succeeded)
             {
-                logger.LogWarning("Ошибка входа пользователя {0} в систему");
+                logger.LogWarning("Ошибка входа пользователя {0} в систему", model.UserName);
                 ModelState.AddModelError("", "Вход невозможен");
 
                 return View(model);
@@ -64,7 +64,7 @@ namespace WebStore.Controllers
 
             await _signInManager.SignOutAsync();
 
-            logger.LogInformation("Пользователь {0} вышел из системы");
+            logger.LogInformation("Пользователь {0} вышел из системы", userName);
             return RedirectToAction("Index", "Home");
         }
 
@@ -87,28 +87,30 @@ namespace WebStore.Controllers
 
             var user = new User {UserName=model.UserName, Email=model.Email };
 
-            
-
-            var createResult = await _userManager.CreateAsync(user, model.Password);
-
-            if (!createResult.Succeeded)
+            using (logger.BeginScope("Регистрация нового пользователя"))
             {
-                foreach (var identityError in createResult.Errors)
+                var createResult = await _userManager.CreateAsync(user, model.Password);
+
+                if (!createResult.Succeeded)
                 {
-                    ModelState.AddModelError("", identityError.Description);
+                    foreach (var identityError in createResult.Errors)
+                    {
+                        ModelState.AddModelError("", identityError.Description);
+                    }
+                    logger.LogInformation("Ошибка регистрации пользователя {0} :{1}",
+                        model.UserName,
+                        string.Join(",", createResult.Errors.Select(e => e.Description)));
+                    return View(model);
                 }
-                logger.LogInformation("Ошибка регистрации пользователя {0} :{1}", 
-                    model.UserName,
-                    string.Join(",",createResult.Errors.Select(e=>e.Description)));
-                return View(model);
+                logger.LogInformation("Пользователь успешно зарегистрирован {0}", model.UserName);
+                await _signInManager.SignInAsync(user, false);
+
+                await _userManager.AddToRoleAsync(user, "User");
+
+                logger.LogInformation("Пользователь успешно вошел в систему {0}", model.UserName);
+                return RedirectToAction("Index", "Home");
+
             }
-            logger.LogInformation("Пользователь успешно зарегистрирован {0}", model.UserName);
-            await _signInManager.SignInAsync(user, false);
-
-            await _userManager.AddToRoleAsync(user, "User");
-
-            logger.LogInformation("Пользователь успешно вошел в систему {0}", model.UserName);
-            return RedirectToAction("Index","Home");
         }
     }
 }

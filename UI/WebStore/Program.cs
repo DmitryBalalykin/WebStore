@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using WebStore.DAL;
 
 namespace WebStore
@@ -21,6 +22,12 @@ namespace WebStore
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+            //.ConfigureLogging(
+            //    (host,log) =>
+            //    {
+            //        log.AddFilter<ConsoleLoggerProvider>("System", LogLevel.Error);
+            //        log.AddFilter<ConsoleLoggerProvider>("Microsoft", LogLevel.Warning);
+            //    })
                 .UseStartup<Startup>();
     }
 }
