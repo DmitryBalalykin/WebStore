@@ -34,16 +34,40 @@ namespace WebStore.ServiceHosting
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<WebStoreContext>(optionsAction: options => options.UseSqlServer(
-    Configuration.GetConnectionString(name: "DefaultConnection")));
+Configuration.GetConnectionString(name: "DefaultConnection")));
+
+
+            services.AddIdentity<User, IdentityRole>()
+   .AddEntityFrameworkStores<WebStoreContext>()
+   .AddDefaultTokenProviders();
+
 
             services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
-            services.AddSingleton<IProductService, InMemoryProductService>();
             services.AddScoped<IProductService, SqlProductService>();
             services.AddScoped<IOrdersService, SqlOrderService>();
             services.AddScoped<ICartService, CookeCartService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.Configure<IdentityOptions>(cfg =>
+            {
+                cfg.Password.RequiredLength = 3;
+                cfg.Password.RequireDigit = false;
+                cfg.Password.RequireLowercase = false;
+                cfg.Password.RequireUppercase = false;
+                cfg.Password.RequireNonAlphanumeric = false;
+                cfg.Password.RequiredUniqueChars = 3;
+
+                cfg.Lockout.MaxFailedAccessAttempts = 10;
+                cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                cfg.Lockout.AllowedForNewUsers = true;
+
+                cfg.User.RequireUniqueEmail = false; // грабли!
+            });
+
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

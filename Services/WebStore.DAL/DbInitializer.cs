@@ -15,7 +15,7 @@ namespace WebStore.DAL
     {
         public static void Initializre(WebStoreContext context)
         {
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
 
             if (context.Products.Any())
             {

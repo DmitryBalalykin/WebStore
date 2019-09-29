@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebStore.DomainNew.Filters;
 using WebStore.Infrastucture.Interfaces;
 using WebStore.ViewModel;
@@ -11,7 +12,8 @@ namespace WebStore.Controllers
 {
     public class HomeController : Controller
     {
-        private IProductService _productService;
+        private readonly ILogger<HomeController> _logger;
+        private readonly IProductService _productService;
 
         private readonly List<ContactInfo> contacts = new List<ContactInfo>
         {
@@ -27,8 +29,9 @@ namespace WebStore.Controllers
             }
         };
 
-        public HomeController(IProductService productService)
+        public HomeController(IProductService productService, ILogger<HomeController> logger)
         {
+            _logger = logger;
             _productService = productService;
         }
 
@@ -39,6 +42,7 @@ namespace WebStore.Controllers
 
         public IActionResult MyNotFound()
         {
+            _logger.LogWarning("Запрос страници 404");
             return View();
         }
 

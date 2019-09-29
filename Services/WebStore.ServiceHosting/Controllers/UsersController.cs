@@ -77,7 +77,7 @@ namespace WebStore.ServiceHosting.Controllers
         [HttpPost("SetPasswordHash")]
         public async Task<string> SetPasswordHashAsync([FromBody] PasswordHashDTO hash)
         {
-            await _usersStore.SetPasswordHashAsync(hash.user, hash.hash);
+            await _usersStore.SetPasswordHashAsync(hash.user, hash.Hash);
             return hash.user.PasswordHash;
         }
 
