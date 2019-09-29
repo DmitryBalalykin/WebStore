@@ -66,6 +66,7 @@ namespace WebStore.Infrastucture.Implementations
                     Name="SPORTSWEAR",
                     Order=0,
                     ParentId=null,
+                    
                 },
                 new Section
                 {
@@ -281,7 +282,7 @@ namespace WebStore.Infrastucture.Implementations
                     Price = 15,
                     BrandId = 1,
                     SectionId = 24,
-                    ImageUrl = "product12.jpg"
+                    ImageUrl = "product12.jpg",
                 },
                 new ProductDTO
                 {

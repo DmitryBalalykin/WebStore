@@ -54,27 +54,27 @@ namespace WebStore.ViewComponents
 
             foreach (var parentCategory in mainNewStatusies)
             {
-                homeStatus.Add(new ProductViewModel
+                newStatus.Add(new ProductViewModel
                 {
                     Id = parentCategory.Id,
                     Name = parentCategory.Name,
                     Order = parentCategory.Order,
                     ImageUrl = parentCategory.ImageUrl,
                     Price = parentCategory.Price,
-                    NewStatus = homeStatus
+                    NewStatus = newStatus
                 });
             }
 
             foreach (var parentCategory in mainSaleStatusies)
             {
-                homeStatus.Add(new ProductViewModel
+                saleStatus.Add(new ProductViewModel
                 {
                     Id = parentCategory.Id,
                     Name = parentCategory.Name,
                     Order = parentCategory.Order,
                     ImageUrl = parentCategory.ImageUrl,
                     Price = parentCategory.Price,
-                    SaleStatus = homeStatus
+                    SaleStatus = saleStatus
                 });
             }
             return homeStatus;
