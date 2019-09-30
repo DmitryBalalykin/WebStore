@@ -40,6 +40,11 @@ namespace WebStore.Controllers
             return View();
         }
 
+        public IActionResult ThrowExeption()
+        {
+            throw new ApplicationException("Отладочное исключение");
+        }
+
         public IActionResult MyNotFound()
         {
             _logger.LogWarning("Запрос страници 404");

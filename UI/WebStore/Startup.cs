@@ -20,6 +20,8 @@ using WebStore.Clients.Products;
 using WebStore.Services.SQL;
 using WebStore.Clients.Orders;
 using WebStore.Clients.Users;
+using Microsoft.Extensions.Logging;
+using WebStore.Logger;
 
 namespace WebStore
 {
@@ -39,7 +41,7 @@ namespace WebStore
             services.AddMvc();
 
             services.AddIdentity<User, IdentityRole>()
-   .AddDefaultTokenProviders();
+                    .AddDefaultTokenProviders();
 
             services.AddSingleton<IEmployeesData, EmployeesClient>();
             services.AddScoped<IProductService, ProductsClient>();
@@ -73,14 +75,17 @@ namespace WebStore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory log)
         {
+            //log.AddLog4Net();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             //app.UseMiddleware<TokenMiddleware>();
+            app.UseMiddleware<ErrorHendlingMiddleware>();
 
             app.UseStaticFiles();
 

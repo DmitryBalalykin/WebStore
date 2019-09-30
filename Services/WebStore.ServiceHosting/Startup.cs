@@ -19,6 +19,7 @@ using WebStore.Infrastucture.Implementations;
 using WebStore.Infrastucture.Interfaces;
 using WebStore.Interface.Services;
 using WebStore.Services.SQL;
+using WebStore.Logger;
 
 namespace WebStore.ServiceHosting
 {
@@ -73,8 +74,10 @@ Configuration.GetConnectionString(name: "DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory log)
         {
+            //log.AddLog4Net();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
