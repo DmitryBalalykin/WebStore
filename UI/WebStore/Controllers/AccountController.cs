@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebStore.DomainNew.Entities;
 using WebStore.ViewModel;
 
@@ -26,13 +27,14 @@ namespace WebStore.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model,[FromServices] ILogger<AccountController> logger)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
+            logger.LogInformation("Пользователь{0} вошел в систему", model.UserName);
             var loginResult = await _signInManager.PasswordSignInAsync(
                 model.UserName, 
                 model.Password, 
@@ -41,6 +43,7 @@ namespace WebStore.Controllers
 
             if (!loginResult.Succeeded)
             {
+                logger.LogWarning("Ошибка входа пользователя {0} в систему", model.UserName);
                 ModelState.AddModelError("", "Вход невозможен");
 
                 return View(model);
@@ -54,10 +57,14 @@ namespace WebStore.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout([FromServices] ILogger<AccountController> logger)
         {
+
+            var userName = User.Identity.Name;
+
             await _signInManager.SignOutAsync();
 
+            logger.LogInformation("Пользователь {0} вышел из системы", userName);
             return RedirectToAction("Index", "Home");
         }
 
@@ -69,31 +76,41 @@ namespace WebStore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserViewModel model)
+        public async Task<IActionResult> Register(RegisterUserViewModel model, 
+                                                   [FromServices] ILogger<AccountController> logger)
         {
             if (!ModelState.IsValid)
             {
+                logger.LogWarning("Ошибка модели модели регистрации нового пользователя");
                 return View(model);
             }
 
             var user = new User {UserName=model.UserName, Email=model.Email };
 
-            var createResult = await _userManager.CreateAsync(user, model.Password);
-
-            if (!createResult.Succeeded)
+            using (logger.BeginScope("Регистрация нового пользователя"))
             {
-                foreach (var identityError in createResult.Errors)
+                var createResult = await _userManager.CreateAsync(user, model.Password);
+
+                if (!createResult.Succeeded)
                 {
-                    ModelState.AddModelError("", identityError.Description);
-                }
+                    foreach (var identityError in createResult.Errors)
+                    {
+                        ModelState.AddModelError("", identityError.Description);
+                    }
+                    logger.LogInformation("Ошибка регистрации пользователя {0} :{1}",
+                        model.UserName,
+                        string.Join(",", createResult.Errors.Select(e => e.Description)));
                     return View(model);
+                }
+                logger.LogInformation("Пользователь успешно зарегистрирован {0}", model.UserName);
+                await _signInManager.SignInAsync(user, false);
+
+                await _userManager.AddToRoleAsync(user, "User");
+
+                logger.LogInformation("Пользователь успешно вошел в систему {0}", model.UserName);
+                return RedirectToAction("Index", "Home");
+
             }
-
-            await _signInManager.SignInAsync(user, false);
-
-            await _userManager.AddToRoleAsync(user, "User");
-
-            return RedirectToAction("Index","Home");
         }
     }
 }

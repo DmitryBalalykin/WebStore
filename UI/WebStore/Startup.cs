@@ -19,7 +19,9 @@ using WebStore.Clients.Employees;
 using WebStore.Clients.Products;
 using WebStore.Services.SQL;
 using WebStore.Clients.Orders;
-
+using WebStore.Clients.Users;
+using Microsoft.Extensions.Logging;
+using WebStore.Logger;
 
 namespace WebStore
 {
@@ -35,36 +37,55 @@ namespace WebStore
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddMvc();
 
+            services.AddIdentity<User, IdentityRole>()
+                    .AddDefaultTokenProviders();
+
             services.AddSingleton<IEmployeesData, EmployeesClient>();
-            services.AddSingleton<IProductService, ProductsClient>();
+            services.AddScoped<IProductService, ProductsClient>();
+            services.AddScoped<ICartService, CookeCartService>();
             services.AddScoped<IOrdersService, OrdersClient>();
 
-            services.AddScoped<ICartService, CookeCartService>();
+            services.AddTransient<IUserStore<User>, UsersClient>();
+            services.AddTransient<IUserRoleStore<User>, UsersClient>();
+            services.AddTransient<IUserPasswordStore<User>, UsersClient>();
+            services.AddTransient<IUserEmailStore<User>, UsersClient>();
+            services.AddTransient<IUserPhoneNumberStore<User>, UsersClient>();
+            services.AddTransient<IUserClaimStore<User>, UsersClient>();
+            services.AddTransient<IUserTwoFactorStore<User>, UsersClient>();
+            services.AddTransient<IUserLoginStore<User>, UsersClient>();
+            services.AddTransient<IUserLockoutStore<User>, UsersClient>();
 
-            services.AddDbContext<WebStoreContext>(optionsAction: options => options.UseSqlServer(
-                Configuration.GetConnectionString(name: "DefaultConnection")));
+            services.AddTransient<IRoleStore<IdentityRole>, RolesClient>();
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<WebStoreContext>()
-                .AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(cfg =>
+            {
+                cfg.Cookie.HttpOnly = true;
+                cfg.Cookie.Expiration = TimeSpan.FromDays(150);
+                cfg.Cookie.MaxAge = TimeSpan.FromDays(150);
 
-            services.AddTransient<IValueService, ValuesClient>();
+                cfg.LoginPath = "/Account/Login";
+                cfg.LogoutPath = "/Account/Logout";
+                cfg.AccessDeniedPath = "/Account/AccessDenied";
 
-            //Насторойки для корзины товаров
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                cfg.SlidingExpiration = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory log)
         {
+            //log.AddLog4Net();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             //app.UseMiddleware<TokenMiddleware>();
+            app.UseMiddleware<ErrorHendlingMiddleware>();
 
             app.UseStaticFiles();
 

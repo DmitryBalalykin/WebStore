@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using WebStore.DAL;
 
 namespace WebStore
@@ -16,30 +17,17 @@ namespace WebStore
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
-
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var context = services.GetRequiredService<WebStoreContext>();
-
-                try
-                {
-                    DbInitializer.Initializre(context);
-                    DbInitializer.InitializreUsers(services);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger>();
-                    logger.LogError(ex, message: "OOps. Something went wrong...");
-                }
-            }
-            host.Run();
+            CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+            //.ConfigureLogging(
+            //    (host,log) =>
+            //    {
+            //        log.AddFilter<ConsoleLoggerProvider>("System", LogLevel.Error);
+            //        log.AddFilter<ConsoleLoggerProvider>("Microsoft", LogLevel.Warning);
+            //    })
+                .UseStartup<Startup>();
     }
 }
