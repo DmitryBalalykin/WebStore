@@ -6,52 +6,53 @@ using WebStore.DomainNew.DTO;
 using WebStore.DomainNew.Entities;
 using WebStore.DomainNew.Filters;
 using WebStore.Infrastucture.Interfaces;
+using WebStore.Services.Map;
 
 namespace WebStore.Infrastucture.Implementations
 {
     public class InMemoryProductService : IProductService
     {
-        private readonly List<BrandDTO> _brands;
+        private readonly List<Brand> _brands;
 
         private readonly List<Section> _sections;
 
-        private readonly List<ProductDTO> _products;
+        private readonly List<Product> _products;
 
         public InMemoryProductService()
         {
-            _brands = new List<BrandDTO>
+            _brands = new List<Brand>
             {
-                new BrandDTO
+                new Brand
                 {
                     Id =1,
                     Name ="ACNE",
                     Order = 0
                 },
-                new BrandDTO
+                new Brand
                 {
                     Id = 2,
                     Name = "Grüne Erde",
                     Order =1,
                 },
-                new BrandDTO
+                new Brand
                 {
                     Id = 3,
                     Name = "Albiro",
                     Order =2,
                 },
-                new BrandDTO
+                new Brand
                 {
                     Id = 5,
                     Name = "Ronhill",
                     Order =3,
                 },
-                new BrandDTO
+                new Brand
                 {
                     Id = 6,
                     Name = "Boudestijn",
                     Order =4,
                 },
-                new BrandDTO
+                new Brand
                 {
                     Id = 7,
                     Name = "Rösch creative culture",
@@ -272,9 +273,9 @@ namespace WebStore.Infrastucture.Implementations
                     ParentId=null,
                 },
             };
-            _products = new List<ProductDTO>
+            _products = new List<Product>
             {
-                new ProductDTO
+                new Product
                 {
                     Id=1,
                     Name = "Easy Polo Black Edition",
@@ -284,7 +285,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 24,
                     ImageUrl = "product12.jpg",
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=2,
                     Name = "Easy Polo Black Edition",
@@ -294,7 +295,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 24,
                     ImageUrl = "product11.jpg"
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=3,
                     Name = "Easy Polo Black Edition",
@@ -304,7 +305,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 2,
                     ImageUrl = "product10.jpg"
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=4,
                     Name = "Easy Polo Black Edition",
@@ -314,7 +315,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 2,
                     ImageUrl = "product9.jpg"
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=5,
                     Name = "Easy Polo Black Edition",
@@ -324,7 +325,7 @@ namespace WebStore.Infrastucture.Implementations
                     SectionId = 4,
                     ImageUrl = "product8.jpg"
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=6,
                     Name = "Easy Polo Black Edition",
@@ -335,7 +336,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product1.jpg",
                     StatusHome =true
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=7,
                     Name = "Easy Polo Black Edition",
@@ -346,7 +347,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product2.jpg",
                     StatusHome =true
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=8,
                     Name = "Easy Polo Black Edition",
@@ -357,7 +358,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product3.jpg",
                     StatusHome =true
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=9,
                     Name = "Easy Polo Black Edition",
@@ -368,7 +369,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product4.jpg",
                     StatusNew = true
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=10,
                     Name = "Easy Polo Black Edition",
@@ -379,7 +380,7 @@ namespace WebStore.Infrastucture.Implementations
                     ImageUrl = "product5.jpg",
                     StatusSale = true
                 },
-                new ProductDTO
+                new Product
                 {
                     Id=11,
                     Name = "Easy Polo Black Edition",
@@ -393,7 +394,7 @@ namespace WebStore.Infrastucture.Implementations
             };
         }
 
-        public IEnumerable<BrandDTO> GetBrands()
+        public IEnumerable<Brand> GetBrands()
         {
             return _brands;
         }
@@ -407,19 +408,7 @@ namespace WebStore.Infrastucture.Implementations
         {
             var products = _products;
 
-            if (filter is null) return products.Select(p => new ProductDTO 
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Order = p.Order,
-                Price = p.Price,
-                ImageUrl = p.ImageUrl,
-                Brand = p.Brand is null ? null : new BrandDTO
-                {
-                    Id = p.Brand.Id,
-                    Name = p.Brand.Name
-                }
-            });
+            if (filter is null) return products.Select(ProductMapper.ToDTO);
 
             if (filter.SectionId.HasValue)//Если фильтр .HesValue-задан
                 products = products.Where(x => x.SectionId == filter.SectionId.Value).ToList();
@@ -427,55 +416,19 @@ namespace WebStore.Infrastucture.Implementations
             if (filter.BrandId.HasValue)
                 products = products.Where(x => x.BrandId == filter.BrandId.Value).ToList();
 
-            return products.Select(p=> new ProductDTO
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Order = p.Order,
-                Price = p.Price,
-                ImageUrl = p.ImageUrl,
-                Brand = p.Brand is null ? null : new BrandDTO
-                {
-                    Id = p.Brand.Id,
-                    Name = p.Brand.Name
-                }
-            });
+            return products.Select(p=> p.ToDTO());
         }
 
         public IEnumerable<ProductDTO> GetProducts()
         {
             var products = _products;
 
-            return products.Select(p => new ProductDTO
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Order = p.Order,
-                Price = p.Price,
-                ImageUrl = p.ImageUrl,
-                Brand = p.Brand is null ? null : new BrandDTO
-                {
-                    Id = p.Brand.Id,
-                    Name = p.Brand.Name
-                }
-            });
+            return products.Select(p => p.ToDTO());
         }
 
         public ProductDTO GetProductById(int id)
         {
-            var product = _products.FirstOrDefault(x => x.Id == id);
-            return new ProductDTO
-            {Id =product.Id,
-            Name = product.Name,
-            Order = product.Order,
-            Price = product.Price,
-            ImageUrl = product.ImageUrl,
-                Brand = product.Brand is null ? null : new BrandDTO
-                {
-                    Id = product.Brand.Id,
-                    Name = product.Brand.Name
-                }
-            };
+            return _products.FirstOrDefault(x => x.Id == id).ToDTO();
         }
     }
 }

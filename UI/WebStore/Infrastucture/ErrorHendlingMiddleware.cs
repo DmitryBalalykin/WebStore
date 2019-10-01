@@ -7,33 +7,35 @@ using System.Threading.Tasks;
 
 namespace WebStore.Infrastucture
 {
-    public class ErrorHendlingMiddleware
+    public class ErrorHandlingMiddleware
     {
-        private readonly ILogger<ErrorHendlingMiddleware> _logger;
-        private readonly RequestDelegate _next;
+        private readonly RequestDelegate _Next;
+        private readonly ILogger<ErrorHandlingMiddleware> _Looger;
 
-        public ErrorHendlingMiddleware(RequestDelegate next, ILogger<ErrorHendlingMiddleware> logger)
+        public ErrorHandlingMiddleware(RequestDelegate Next, ILogger<ErrorHandlingMiddleware> Looger)
         {
-            _logger = logger;
-            _next = next;
+            _Next = Next;
+            _Looger = Looger;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task Invoke(HttpContext Context)
         {
             try
             {
-                await _next.Invoke(context);
+                // Предварительная обработка Context
+                await _Next(Context);
+                // Постобработка
             }
             catch (Exception error)
             {
-                await HendleExceptionAsync(context, error);
+                await HandleExceptionAsync(Context, error);
                 throw;
             }
-        } 
+        }
 
-        private Task HendleExceptionAsync(HttpContext context, Exception error)
+        private Task HandleExceptionAsync(HttpContext Context, Exception Error)
         {
-            _logger.LogError(error, "Ошибка при обработке запроса {0}", context.Request.Path);
+            _Looger.LogError(Error, "Ошибка при обработке запроса {0}", Context.Request.Path);
             return Task.CompletedTask;
         }
     }

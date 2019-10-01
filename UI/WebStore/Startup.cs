@@ -85,7 +85,7 @@ namespace WebStore
             }
 
             //app.UseMiddleware<TokenMiddleware>();
-            app.UseMiddleware<ErrorHendlingMiddleware>();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseStaticFiles();
 

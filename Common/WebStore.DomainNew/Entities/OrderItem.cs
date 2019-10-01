@@ -21,7 +21,7 @@ namespace WebStore.DomainNew.Entities
         /// <summary>
         /// Ссылка по продукт
         /// </summary>
-        public virtual ProductDTO Product { get; set; }
+        public virtual Product Product { get; set; }
 
         /// <summary>
         /// Ссылка на порядок

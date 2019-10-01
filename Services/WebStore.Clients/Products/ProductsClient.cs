@@ -18,9 +18,9 @@ namespace WebStore.Clients.Products
 
         }
 
-        public IEnumerable<BrandDTO> GetBrands()
+        public IEnumerable<Brand> GetBrands()
         {
-            return Get<List<BrandDTO>>($"{_ServiceAddress}/brands");
+            return Get<List<Brand>>($"{_ServiceAddress}/brands");
         }
 
         public ProductDTO GetProductById(int id)

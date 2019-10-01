@@ -31,6 +31,6 @@ namespace WebStore.DomainNew.Entities
         /// <summary>
         /// Ссылка на коллекцию OrderItem
         /// </summary>
-        public virtual Collection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }
