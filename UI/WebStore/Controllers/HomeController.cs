@@ -13,7 +13,7 @@ namespace WebStore.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IProductService _productService;
+        //private readonly IProductService _productService;
 
         private readonly List<ContactInfo> contacts = new List<ContactInfo>
         {
@@ -29,10 +29,10 @@ namespace WebStore.Controllers
             }
         };
 
-        public HomeController(IProductService productService, ILogger<HomeController> logger)
+        public HomeController(/*IProductService productService,*/ ILogger<HomeController> logger)
         {
             _logger = logger;
-            _productService = productService;
+            //_productService = productService;
         }
 
         public IActionResult Index()
@@ -54,6 +54,17 @@ namespace WebStore.Controllers
         public IActionResult Contact()
         {
             return View(contacts);
+        }
+
+        public IActionResult ErrorStatus (string id)
+        {
+            _logger.LogWarning("Запрос статусного кода ошибки {0}", id);
+
+            switch (id)
+            {
+                default: return Content($"Статусный код ошибки {id}");
+                case "404": return RedirectToAction(nameof(MyNotFound));
+            }
         }
     }
 }
