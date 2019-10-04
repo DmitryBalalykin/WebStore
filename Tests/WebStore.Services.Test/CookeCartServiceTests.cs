@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using WebStore.DomainNew.ViewModel;
+using WebStore.Infrastucture.Implementations;
+using WebStore.Infrastucture.Interfaces;
+using WebStore.Interface.Services;
 using WebStore.ViewModel;
 using Assert = Xunit.Assert;
 
@@ -45,6 +49,32 @@ namespace WebStore.Services.Test
             Assert.Equal(expected_count, result);
         }
 
+        [TestMethod]
+        public void CartService_RemoveFromCart_Remove_Correct_Item()
+        {
+            const int item_id = 1;
 
+            var cart = new Cart
+            {
+                Items = new List<CartItem>
+                {
+                    new CartItem{ProductId = item_id, Quantity = 1},
+                    new CartItem{ProductId = 2, Quantity = 3}
+                }
+            };
+
+            var product_data_mock = new Mock<IProductService>();
+            var cart_store_mock = new Mock<ICartStore>();
+            cart_store_mock
+                .Setup(p => p.Cart)
+                .Returns(cart);
+
+            var cart_service = new CartService(product_data_mock.Object, cart_store_mock.Object);
+
+            cart_service.RemoveFromCart(item_id);
+
+            Assert.Single(cart.Items);
+            Assert.Equal(2, cart.Items[0].ProductId);
+        }
     }
 }

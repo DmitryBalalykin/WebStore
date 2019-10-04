@@ -22,6 +22,7 @@ using WebStore.Clients.Orders;
 using WebStore.Clients.Users;
 using Microsoft.Extensions.Logging;
 using WebStore.Logger;
+using WebStore.Services;
 
 namespace WebStore
 {
@@ -45,8 +46,10 @@ namespace WebStore
 
             services.AddSingleton<IEmployeesData, EmployeesClient>();
             services.AddScoped<IProductService, ProductsClient>();
-            services.AddScoped<ICartService, CookeCartService>();
+            services.AddScoped<ICartService, CartService>();
             services.AddScoped<IOrdersService, OrdersClient>();
+            services.AddScoped<ICartStore, CookiesCartStore>();
+
 
             services.AddTransient<IUserStore<User>, UsersClient>();
             services.AddTransient<IUserRoleStore<User>, UsersClient>();
