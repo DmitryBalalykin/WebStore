@@ -14,9 +14,9 @@ namespace WebStore.DAL
         {
         }
 
-        public DbSet<ProductDTO> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
 
-        public DbSet<BrandDTO> Brands { get; set; }
+        public DbSet<Brand> Brands { get; set; }
 
         public DbSet<Section> Sections { get; set; }
 

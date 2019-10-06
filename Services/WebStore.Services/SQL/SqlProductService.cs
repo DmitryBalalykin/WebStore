@@ -8,6 +8,7 @@ using WebStore.DomainNew.DTO;
 using WebStore.DomainNew.Entities;
 using WebStore.DomainNew.Filters;
 using WebStore.Infrastucture.Interfaces;
+using WebStore.Services.Map;
 
 namespace WebStore.Infrastucture.Implementations
 {
@@ -20,17 +21,18 @@ namespace WebStore.Infrastucture.Implementations
             _context = context;
         }
 
-        public IEnumerable<BrandDTO> GetBrands()
+        public IEnumerable<Brand> GetBrands()
         {
             return _context.Brands.ToList();
         }
 
         public IEnumerable<ProductDTO> GetProducts(ProductFilter filter)
         {
-            var products = _context.Products
-                .Include(p => p.Brand)
-                .Include(p => p.Section)
-                .AsQueryable();
+            IQueryable<Product> products = _context.Products;
+            if (filter is null)
+                return products
+                    .AsEnumerable()
+                    .Select(p => p.ToDTO());
 
             if (filter.SectionId.HasValue)//Если фильтр .HesValue-задан
                 products = products.Where(x => x.SectionId == filter.SectionId.Value);
@@ -40,19 +42,7 @@ namespace WebStore.Infrastucture.Implementations
 
             return products
                 .ToList()
-                .Select(p => new ProductDTO
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Order = p.Order,
-                    Price = p.Price,
-                    ImageUrl = p.ImageUrl,
-                    Brand = p.Brand is null ? null : new BrandDTO
-                    {
-                        Id = p.Brand.Id,
-                        Name = p.Brand.Name
-                    }
-                });
+                .Select(ProductMapper.ToDTO);
 
         }
 
@@ -65,19 +55,7 @@ namespace WebStore.Infrastucture.Implementations
 
             return products
                 .ToList()
-                .Select(p => new ProductDTO
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Order = p.Order,
-                    Price = p.Price,
-                    ImageUrl = p.ImageUrl,
-                    Brand = p.Brand is null ? null : new BrandDTO
-                    {
-                        Id = p.Brand.Id,
-                        Name = p.Brand.Name
-                    }
-                });
+                .Select(ProductMapper.ToDTO);
         }
 
         public IEnumerable<Section> GetSections()
@@ -91,19 +69,7 @@ namespace WebStore.Infrastucture.Implementations
                 .Include(x => x.Brand)
                 .Include(x => x.Section)
                 .FirstOrDefault(x => x.Id == id);
-            return  new ProductDTO
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Order = p.Order,
-                Price = p.Price,
-                ImageUrl = p.ImageUrl,
-                Brand = p.Brand is null ? null : new BrandDTO
-                {
-                    Id = p.Brand.Id,
-                    Name = p.Brand.Name
-                }
-            };
+            return  p.ToDTO();
         }
     }
 }

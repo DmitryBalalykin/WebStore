@@ -11,6 +11,7 @@ using WebStore.DomainNew.DTO.Order;
 using WebStore.DomainNew.Entities;
 using WebStore.DomainNew.ViewModel;
 using WebStore.Interface.Services;
+using WebStore.Services.Map;
 
 namespace WebStore.Services.SQL
 {
@@ -64,22 +65,7 @@ namespace WebStore.Services.SQL
                 _context.SaveChanges();
                 transaction.Commit();
 
-                return new OrderDTO
-                {
-                    Id = order.Id,
-                    Name = order.Name,
-                    Address = order.Address,
-                    Phone = order.Phone,
-                    Data = order.Date,
-                    orderItems = order.OrderItems
-                    .Select(item => new OrderItemDTO
-                    {
-                        Id = item.Id,
-                        Price = item.Price,
-                        Quantity = item.Quantity
-                    })
-                    .ToList()
-                };
+                return order.ToDTO();
             }
         }
 
@@ -89,22 +75,7 @@ namespace WebStore.Services.SQL
                 .Include("OrderItem")
                 .FirstOrDefault(o => o.Id == id);
 
-            return new OrderDTO
-            {
-                Id = order.Id,
-                Name = order.Name,
-                Address = order.Address,
-                Phone = order.Phone,
-                Data = order.Date,
-                orderItems = order.OrderItems
-                    .Select(item => new OrderItemDTO
-                    {
-                        Id = item.Id,
-                        Price = item.Price,
-                        Quantity = item.Quantity
-                    })
-                    .ToList()
-            };
+            return order.ToDTO();
         }
 
         public IEnumerable<OrderDTO> GetUserOrders(string userName)
@@ -113,22 +84,7 @@ namespace WebStore.Services.SQL
                 .Include("User") //Подключаем связанные сущьности
                 .Include("OrderItem") //Подключаем связанные сущьности
                 .Where(o => o.User.UserName == userName) //отфильтруем
-                .Select(order => new OrderDTO
-                {
-                    Id = order.Id,
-                    Name = order.Name,
-                    Address = order.Address,
-                    Phone = order.Phone,
-                    Data = order.Date,
-                    orderItems = order.OrderItems
-                    .Select(item => new OrderItemDTO
-                    {
-                        Id = item.Id,
-                        Price = item.Price,
-                        Quantity = item.Quantity
-                    })
-                    .ToList()
-                })
+                .Select(order => order.ToDTO())
                 .ToList();
         }
     }

@@ -48,7 +48,7 @@ Configuration.GetConnectionString(name: "DefaultConnection")));
             services.AddSingleton<IEmployeesData, InMemoryEmployeeData>();
             services.AddScoped<IProductService, SqlProductService>();
             services.AddScoped<IOrdersService, SqlOrderService>();
-            services.AddScoped<ICartService, CookeCartService>();
+            services.AddScoped<ICartService, CartService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
