@@ -82,8 +82,8 @@
             <p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
         </div>
         <div class="row">
-            @await Html.PartialAsync(partialViewName: "Partial/_OrderPartial", Model.OrderViewModel,
-           new ViewDataDictionary(ViewData) { { "sumCart", sumCart} })
+            @await Html.PartialAsync("Partial/_OrderPartial", Model.OrderViewModel,
+new ViewDataDictionary(ViewData) { { "sumCart", sumCart } })
         </div>
     </div>
 </section><!--/#do_action-->
