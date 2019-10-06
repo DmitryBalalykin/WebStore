@@ -20,7 +20,10 @@ namespace WebStore.Controllers
             _cartService = cartService;
         }
 
-
+        /// <summary>
+        /// Корзина товаров
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Cart()
         {
             var model = new OrderInfo
@@ -39,18 +42,33 @@ namespace WebStore.Controllers
             return RedirectToAction("Cart");
         }
 
+        /// <summary>
+        /// Удалить заказ
+        /// </summary>
+        /// <returns></returns>
         public IActionResult RemoveAll()
         {
             _cartService.RemoveAll();
             return RedirectToAction("Cart");
         }
 
+        /// <summary>
+        /// добавить товар в корзину
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         public IActionResult AddToCart(int id, string returnUrl)
         {
             _cartService.AddToCart(id);
             return Redirect(returnUrl);
         }
 
+        /// <summary>
+        /// Удалить товар из корзины
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult RemoveFromCart(int id)
         {
             _cartService.RemoveFromCart(id);

@@ -14,6 +14,8 @@ using WebStore.ViewModel;
 using WebStore.DomainNew.DTO.Order;
 using WebStore.DomainNew.DTO;
 using Microsoft.AspNetCore.Http;
+using WebStore.Infrastucture.Interfaces;
+using WebStore.Infrastucture.Implementations;
 
 namespace WebStore.Tests.Controllers
 {
@@ -94,5 +96,32 @@ namespace WebStore.Tests.Controllers
 
             Assert.Equal(1, redirect_result.RouteValues["id"]);
         }
+
+        [TestMethod]
+        public void CartController_AddToCart_WorksCorrect()
+        {
+            var cart = new Cart
+            {
+                Items = new List<CartItem>()
+            };
+
+            var product_data_mock = new Mock<IProductService>();
+
+            var cart_store_mock = new Mock<ICartStore>();
+            cart_store_mock
+                .Setup(c => c.Cart)
+                .Returns(cart);
+
+            var cart_service = new CartService(product_data_mock.Object, cart_store_mock.Object);
+
+            const int expected_id = 5;
+            cart_service.AddToCart(expected_id);
+
+            Assert.Equal(1, cart.ItemsCount);
+            Assert.Equal(1, cart.Items.Count);
+            Assert.Equal(expected_id, cart.Items[0].ProductId);
+        }
+
+
     }
 }
