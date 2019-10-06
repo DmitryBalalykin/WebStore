@@ -15,7 +15,7 @@
                     <ul class="nav navbar-nav collapse navbar-collapse">
                         <li><a is-active-route asp-controller="Home" asp-action="Index">Главная страница</a></li>
                         <li class="dropdown">
-                            <a is-active-route asp-controller="Shop" asp-action="Product">Магазин<i class="fa fa-angle-down"></i></a>
+                            <a is-active-route ignore-action asp-controller="Shop" asp-action="Product">Магазин<i class="fa fa-angle-down"></i></a>
                             <ul role="menu" class="sub-menu">
                                 <li><a is-active-route asp-controller="Shop" asp-action="Product">Товары</a></li>
                                 <li><a is-active-route asp-controller="Cart" asp-action="Checkout">Оформление заказа</a></li>

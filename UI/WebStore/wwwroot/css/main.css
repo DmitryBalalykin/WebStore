@@ -1543,7 +1543,7 @@ h2.title {
 }
 
 .breadcrumbs .breadcrumb li a:after {
-  content:"";
+  /*content:"";*/
   height:auto;
   width: auto;
   border-width: 8px;
