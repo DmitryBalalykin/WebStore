@@ -1,9 +1,9 @@
-﻿@model IEnumerable<WebStore.ViewModel.SectionViewModel>
+﻿@model WebStore.DomainNew.ViewModel.SectionCompleteViewModel
 
 <h2>Category</h2>
 <div class="panel-group category-products" id="accordian">
     <!--category-productsr-->
-    @foreach (var parentSections in Model)
+    @foreach (var parentSections in Model._section)
     {
         if (parentSections.ChildSections.Count > 0)
         {
@@ -16,12 +16,20 @@
                         </a>
                     </h4>
                 </div>
-                <div id="@parentSections.Name.ToLower()" class="panel-collapse collapse">
+                <div id="@parentSections.Name.ToLower()"
+                     class="panel-collapse collapse
+                     @(parentSections.Id == Model.currentParentSection ? "in" : null)">
                     <div class="panel-body">
                         <ul>
                             @foreach (var childSection in parentSections.ChildSections)
                             {
-                                <li><a asp-route-sectionId="@parentSections.Id">@childSection.Name</a></li>
+                                <li @(childSection.Id == Model.currentSectionID ? "class =active":null)>
+                            <a asp-controller="Shop"
+                               asp-action="Product"
+                               asp-route-sectionId="@childSection.Id">
+                                    @childSection.Name
+                            </a>
+                                </li>
                             }
                         </ul>
                     </div>
@@ -32,7 +40,11 @@
         {
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4 class="panel-title"><a asp-route-sectionId="@parentSections.Id">@parentSections.Name</a></h4>
+                    <h4 class="panel-title">
+                    <a
+                       asp-controller="Shop"
+                               asp-action="Product"
+                       asp-route-sectionId="@parentSections.Id">@parentSections.Name</a></h4>
                 </div>
             </div>
         }
