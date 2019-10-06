@@ -35,6 +35,11 @@ namespace WebStore.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Уменьшить колличество товара
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult DecrementFromCart(int id)
         {
             _cartService.DecrementFromCart(id);

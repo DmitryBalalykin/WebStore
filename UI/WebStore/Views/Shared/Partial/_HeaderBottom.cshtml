@@ -13,30 +13,30 @@
                 </div>
                 <div class="mainmenu pull-left">
                     <ul class="nav navbar-nav collapse navbar-collapse">
-                        <li><a asp-controller="Home" asp-action="Index" class="active">Главная страница</a></li>
+                        <li><a is-active-route asp-controller="Home" asp-action="Index" class="active">Главная страница</a></li>
                         <li class="dropdown">
-                            <a href="#">Магазин<i class="fa fa-angle-down"></i></a>
+                            <a is-active-route asp-controller="Shop" asp-action="Product">Магазин<i class="fa fa-angle-down"></i></a>
                             <ul role="menu" class="sub-menu">
-                                <li><a asp-controller="Shop" asp-action="Product">Товары</a></li>
-                                <li><a asp-controller="Cart" asp-action="Checkout">Оформление заказа</a></li>
-                                <li><a asp-controller="Cart" asp-action="Cart">Корзина</a></li>
+                                <li><a is-active-route asp-controller="Shop" asp-action="Product">Товары</a></li>
+                                <li><a is-active-route asp-controller="Cart" asp-action="Checkout">Оформление заказа</a></li>
+                                <li><a is-active-route asp-controller="Cart" asp-action="Cart">Корзина</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="#">Blog<i class="fa fa-angle-down"></i></a>
+                            <a is-active-route asp-controller="Blog" asp-action="BlogList">Blog<i class="fa fa-angle-down"></i></a>
                             <ul role="menu" class="sub-menu">
-                                <li><a asp-controller="Blog" asp-action="BlogList">Blog List</a></li>
-                                <li><a asp-controller="Blog" asp-action="BlogSingle">Blog Single</a></li>
+                                <li><a is-active-route asp-controller="Blog" asp-action="BlogList">Blog List</a></li>
+                                <li><a is-active-route asp-controller="Blog" asp-action="BlogSingle">Blog Single</a></li>
                             </ul>
                         </li>
-                        <li><a asp-controller="Home" asp-action="MyNotFound">Ошибка</a></li>
-                        <li><a asp-controller="Home" asp-action="Contact">Контакты</a></li>
-                        <li><a asp-controller="Employee" asp-action="Index">Сотрудники</a></li>
+                        <li><a is-active-route asp-controller="Home" asp-action="MyNotFound">Ошибка</a></li>
+                        <li><a is-active-route asp-controller="Home" asp-action="Contact">Контакты</a></li>
+                        <li><a is-active-route asp-controller="Employee" asp-action="Index">Сотрудники</a></li>
                         <li class="dropdown">
                             <a href="#">Test<i class="fa fa-angle-down"></i></a>
                             <ul role="menu" class="sub-menu">
-                                <li><a asp-controller="WebApiTest" asp-action="Index">WebTestApi</a></li>
-                                <li><a asp-controller="Home" asp-action="ThrowExeption">Тестовое исключение</a></li>
+                                <li><a is-active-route asp-controller="WebApiTest" asp-action="Index">WebTestApi</a></li>
+                                <li><a is-active-route asp-controller="Home" asp-action="ThrowExeption">Тестовое исключение</a></li>
                             </ul>
                         </li>
                     </ul>
