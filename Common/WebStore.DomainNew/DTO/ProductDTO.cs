@@ -27,6 +27,8 @@ namespace WebStore.DomainNew.DTO
 
         public BrandDTO Brand { get; set; }
 
-        public virtual Section Section { get; set; }
+        public SectionDTO Section { get; set; }
+
+        //public virtual Section Section { get; set; }
     }
 }

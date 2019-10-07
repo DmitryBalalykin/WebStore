@@ -17,7 +17,8 @@ namespace WebStore.Services.Map
                 Order = product.Order,
                 Price = product.Price,
                 ImageUrl = product.ImageUrl,
-                Brand = product.Brand.ToDTO()
+                Brand = product.Brand.ToDTO(),
+                Section = product.Section.ToDTO()
             };
         }
 
@@ -28,7 +29,8 @@ namespace WebStore.Services.Map
             Order = productDTO.Order,
             Price = productDTO.Price,
             ImageUrl = productDTO.ImageUrl,
-            Brand = productDTO.Brand.FromDTO()
+            Brand = productDTO.Brand.FromDTO(),
+            Section = productDTO.Section.FromDTO()
         };
     }
 }
