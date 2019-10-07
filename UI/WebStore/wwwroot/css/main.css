@@ -1543,7 +1543,7 @@ h2.title {
 }
 
 .breadcrumbs .breadcrumb li a:after {
-  content:"";
+  /*content:"";*/
   height:auto;
   width: auto;
   border-width: 8px;
@@ -2520,4 +2520,10 @@ h2.title {
   color: #FE980F;
 }
 
+.panel-body ul li.active{
+    text-decoration:underline
+}
 
+.brands-name ul li.active{
+    text-decoration: underline
+}

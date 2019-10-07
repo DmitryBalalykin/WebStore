@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -11,17 +13,17 @@
     <link href="~/css/font-awesome.min.css" rel="stylesheet">
 
     <environment include="Development">
-        <link href="~/css/prettyPhoto.css" rel="stylesheet">
-        <link href="~/css/price-range.css" rel="stylesheet">
-        <link href="~/css/animate.css" rel="stylesheet">
-        <link href="~/css/responsive.css" rel="stylesheet">
+        <link href="~/css/prettyPhoto.css" rel="stylesheet" asp-append-version="true">
+        <link href="~/css/price-range.css" rel="stylesheet" asp-append-version="true">
+        <link href="~/css/animate.css" rel="stylesheet" asp-append-version="true">
+        <link href="~/css/responsive.css" rel="stylesheet" asp-append-version="true">
+        <link href="~/css/main.css" rel="stylesheet" asp-append-version="true">
     </environment>
 
     <environment exclude="Development">
-        <link href="~/css/site.min.css" rel="stylesheet">
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true">
     </environment>
 
-    <link href="~/css/main.css" rel="stylesheet">
     <!--[if lt IE 9]>
     <script src="~/js/html5shiv.js"></script>
     <script src="~/js/respond.min.js"></script>
@@ -42,26 +44,77 @@
         @await Html.PartialAsync(partialViewName: "Partial/_HeaderBottom");
     </header><!--/header-->
 
+    @{ 
+        BreadCrumbsType type;
+        if (Context.Request.Query.ContainsKey("SectionId"))
+        {
+            type = BreadCrumbsType.Section;
+        }
+        else
+        {
+            if (Context.Request.Query.ContainsKey("BrandId"))
+            {
+                type = BreadCrumbsType.Brand;
+            }
+            else
+            {
+                type = BreadCrumbsType.None;
+            }
+        }
+
+
+
+        if((string)ViewContext.RouteData.Values["action"] == nameof(ShopController.ProductDetails))
+        {
+            type = BreadCrumbsType.Product;
+        }
+
+        var id = 0;
+        var from_type = BreadCrumbsType.Section;
+
+        switch (type)
+        {
+            default: throw new ArgumentOutOfRangeException();
+
+            case BreadCrumbsType.None: break;
+
+            case BreadCrumbsType.Section:
+                id = int.Parse(Context.Request.Query["SectionId"].ToString());
+                break;
+
+            case BreadCrumbsType.Brand:
+                id = int.Parse(Context.Request.Query["BrandId"].ToString());
+                break;
+
+            case BreadCrumbsType.Product:
+                id = int.Parse(ViewContext.RouteData.Values["id"].ToString());
+                if (Context.Request.Query.ContainsKey("FromBrand"))
+                {
+                    from_type = BreadCrumbsType.Brand;
+                }
+                break;
+
+        }
+
+    }
+
     <div class="container">
+        @*<vc:bread-crumbs/>*@
+        @await Component.InvokeAsync("BreadCrumbs", new { Type = type, id, FromType = from_type})
         @RenderBody()
     </div>
 
     <footer id="footer">
         <!--Footer-->
-
         @await Html.PartialAsync(partialViewName: "Partial/_FooterTop");
 
         @await Html.PartialAsync(partialViewName: "Partial/_FooterWidget");
 
         @await Html.PartialAsync(partialViewName: "Partial/_FooterBottom");
-
     </footer><!--/Footer-->
-
-
 
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
-
 
     <environment include="Development">
         <script src="~/js/jquery.scrollUp.min.js"></script>

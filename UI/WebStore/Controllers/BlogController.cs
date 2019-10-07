@@ -19,7 +19,7 @@ namespace WebStore.Controllers
 
         public IActionResult BlogList()
         {
-            _logger.LogInformation("Запросблога");
+            _logger.LogInformation("Запрос блога");
             return View();
         }
 

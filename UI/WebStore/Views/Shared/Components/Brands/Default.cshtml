@@ -1,15 +1,14 @@
-﻿
-@model IEnumerable<BrandViewModel>
+﻿@model  WebStore.DomainNew.ViewModel.BrandCompleteViewModel
 
 <div class="brands_products">
     <!--brands_products-->
     <h2>Brands</h2>
     <div class="brands-name">
         <ul class="nav nav-pills nav-stacked">
-            @foreach (var brand in Model)
+            @foreach (var brand in Model._brand)
             {
-                <li>
-                    <a asp-route-brandId="@brand.Id">
+                <li @(brand.Id == Model.currentBrandId ? "class=active": null)>
+                    <a asp-controller="Shop" asp-action="Product" asp-route-brandId="@brand.Id">
                         <span class="pull-right">(@brand.ProductCount)</span>@brand.Name
                     </a>
                 </li>

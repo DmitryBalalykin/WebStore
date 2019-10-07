@@ -71,5 +71,15 @@ namespace WebStore.Infrastucture.Implementations
                 .FirstOrDefault(x => x.Id == id);
             return  p.ToDTO();
         }
+
+        public Section GetSectionById(int id)
+        {
+            return _context.Sections.FirstOrDefault(s => s.Id == id);
+        }
+
+        public Brand GetBrandById(int id)
+        {
+            return _context.Brands.FirstOrDefault(b => b.Id == id);
+        }
     }
 }

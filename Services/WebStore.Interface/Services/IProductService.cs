@@ -16,6 +16,20 @@ namespace WebStore.Infrastucture.Interfaces
         IEnumerable<Brand> GetBrands();
 
         /// <summary>
+        /// Возвращает секцию с указанныи индификатором
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Section GetSectionById(int id);
+
+        /// <summary>
+        /// Возвращает бренды с указанным индификатором
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Brand GetBrandById(int id);
+
+        /// <summary>
         /// Получение списка секций
         /// </summary>
         IEnumerable<Section> GetSections();
