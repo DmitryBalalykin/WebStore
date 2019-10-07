@@ -42,11 +42,9 @@
         @await Html.PartialAsync(partialViewName: "Partial/_HeaderBottom");
     </header><!--/header-->
 
-    <div class="container">
-        @await Html.PartialAsync(partialViewName: "Partial/_Breadcrums")
-    </div>
 
     <div class="container">
+        <vc:bread-crumbs/>
         @RenderBody()
     </div>
 

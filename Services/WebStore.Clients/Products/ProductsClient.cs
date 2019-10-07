@@ -18,6 +18,11 @@ namespace WebStore.Clients.Products
 
         }
 
+        public Brand GetBrandById(int id)
+        {
+            return Get<Brand>($"{ _ServiceAddress}/brands/{id}");
+        }
+
         public IEnumerable<Brand> GetBrands()
         {
             return Get<List<Brand>>($"{_ServiceAddress}/brands");
@@ -39,6 +44,11 @@ namespace WebStore.Clients.Products
         public IEnumerable<ProductDTO> GetProducts()
         {
             return Get<List<ProductDTO>>($"{_ServiceAddress}/products");
+        }
+
+        public Section GetSectionById(int id)
+        {
+            return Get<Section>($"{_ServiceAddress}/sections/{id}");
         }
 
         public IEnumerable<Section> GetSections()
