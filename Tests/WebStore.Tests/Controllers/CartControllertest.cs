@@ -244,7 +244,7 @@ namespace WebStore.Tests.Controllers
             var product_service_mock = new Mock<IProductService>();
             product_service_mock
                 .Setup(p => p.GetProducts(It.IsAny<ProductFilter>()))
-                .Returns(products);
+                .Returns(new PagedProductDTO { Products = products});
 
             var cart_store_mock = new Mock<ICartStore>();
             cart_store_mock

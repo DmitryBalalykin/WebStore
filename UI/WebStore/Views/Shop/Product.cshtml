@@ -18,6 +18,13 @@
             </div>
             <div class="col-sm-9 padding-right">
                 @await Html.PartialAsync("Partial/_FeaturedItems", Model.Products)
+
+                <paging
+                        page-view-model="@Model.PageViewModel"
+                        page-action="Product"
+                        page-url-SectionId="@Model.SectionId"
+                        page-url-BrandId="@Model.BrandId">
+                </paging>
             </div>
         </div>
     </div>

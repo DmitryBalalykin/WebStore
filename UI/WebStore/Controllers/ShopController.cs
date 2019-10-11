@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using WebStore.DomainNew.Filters;
+using WebStore.DomainNew.ViewModel;
 using WebStore.Infrastucture.Interfaces;
 using WebStore.ViewModel;
 
@@ -12,19 +14,25 @@ namespace WebStore.Controllers
     public class ShopController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IConfiguration _configuration;
 
-        public ShopController(IProductService productService)
+        public ShopController(IProductService productService, IConfiguration configuration)
         {
             _productService = productService;
+            _configuration = configuration;
         }
 
-        public IActionResult Product(int? brandId, int? sectionId)
+        public IActionResult Product(int? brandId, int? sectionId, int page = 1)
         {
+            var page_size = int.Parse(_configuration["PageSize"]);
+
             var products = _productService.GetProducts(
                 new ProductFilter()
                 {
                     SectionId = sectionId,
-                    BrandId = brandId
+                    BrandId = brandId,
+                    Page = page,
+                    PageSize = page_size,
                 });
 
             //Сконвертируем в CatalogViewModel
@@ -32,7 +40,13 @@ namespace WebStore.Controllers
             {
                 BrandId = brandId,
                 SectionId = sectionId,
-                Products = products.Select(p => new ProductViewModel()
+                PageViewModel = new PageViewModel
+                {
+                    PageSize = page_size,
+                    PageNumer =page,
+                    TotalItes = products.TotalCount
+                },
+                Products = products.Products.Select(p => new ProductViewModel()
                 {
                     Id = p.Id,
                     Name = p.Name,

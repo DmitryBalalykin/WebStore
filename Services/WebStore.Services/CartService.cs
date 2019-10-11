@@ -86,7 +86,7 @@ namespace WebStore.Infrastucture.Implementations
             var product = _productService.GetProducts(new ProductFilter()
             {
                 Ids = _cartStore.Cart.Items.Select(x => x.ProductId).ToList()
-            }).Select(p => new ProductViewModel()
+            }).Products.Select(p => new ProductViewModel()
             {
                 Id = p.Id,
                 ImageUrl = p.ImageUrl,
