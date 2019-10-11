@@ -37,11 +37,11 @@
 <body>
     <header id="header">
         <!--header-->
-        @await Html.PartialAsync(partialViewName: "Partial/_HeaderTop");
+        @await Html.PartialAsync(partialViewName: "Partial/_HeaderTop")
 
-        @await Html.PartialAsync(partialViewName: "Partial/_HeaderMiddle");
+        @await Html.PartialAsync(partialViewName: "Partial/_HeaderMiddle")
 
-        @await Html.PartialAsync(partialViewName: "Partial/_HeaderBottom");
+        @await Html.PartialAsync(partialViewName: "Partial/_HeaderBottom")
     </header><!--/header-->
 
     @{ 
@@ -115,6 +115,7 @@
 
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/css/Cart/CartLogic.js"></script>
 
     <environment include="Development">
         <script src="~/js/jquery.scrollUp.min.js"></script>
@@ -126,5 +127,17 @@
     <environment exclude="Development">
         <script src="~/js/site.min.js"></script>
     </environment>
+    <script>
+        $(function () {
+            Cart.init({
+                getCartViewLink: "@Url.Action("GetCartView","Cart")",
+                addToCartLink: "@Url.Action("AddToCartAJAX","Cart")",
+                decrementLink: "@Url.Action("DecrementFromCartAJAX","Cart")",
+                removeFromCartLink: "@Url.Action("RemoveFromCartAJAX","Cart")",
+                removeAllLink: "@Url.Action("RemoveAllAJAX","Cart")"
+            });
+        });
+    </script>
+
 </body>
 </html>
