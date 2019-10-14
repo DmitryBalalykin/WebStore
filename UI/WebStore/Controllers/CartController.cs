@@ -122,7 +122,7 @@ namespace WebStore.Controllers
 
         #region AJAX api
 
-        public IActionResult GetCartViewModel() => ViewComponent("Cart");
+        public IActionResult GetCartView() => ViewComponent("Cart");
 
         public IActionResult AddToCartAJAX(int id)
         {

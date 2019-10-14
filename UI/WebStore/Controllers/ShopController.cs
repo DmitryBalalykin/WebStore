@@ -22,9 +22,11 @@ namespace WebStore.Controllers
             _configuration = configuration;
         }
 
+        private const string PageSize = "PageSize";
+
         public IActionResult Product(int? brandId, int? sectionId, int page = 1)
         {
-            var page_size = int.Parse(_configuration["PageSize"]);
+            var page_size = int.Parse(_configuration[PageSize]);
 
             var products = _productService.GetProducts(
                 new ProductFilter()
@@ -53,8 +55,7 @@ namespace WebStore.Controllers
                     Order = p.Order,
                     ImageUrl = p.ImageUrl,
                     Price = p.Price,
-                    BrandName = p.Brand?.Name ?? String.Empty,
-
+                    BrandName = p.Brand?.Name ?? string.Empty
                 }).OrderBy(p => p.Order).ToList() //Упорядочили -OrderBy() и привели к списку-ToList()
             };
 
@@ -79,6 +80,31 @@ namespace WebStore.Controllers
             });
         }
 
+        public IActionResult GetFiltredItems(int? SectionId, int? BrandId, int Page = 1)
+        {
+            var products = GetProducts(SectionId, BrandId, Page);
+            return PartialView("Partial/_FeaturedItems", products);
+        }
 
+        private IEnumerable<ProductViewModel> GetProducts(int? SectionId, int? BrandId, int Page)
+        {
+            var products_model = _productService.GetProducts(new ProductFilter
+            {
+                SectionId = SectionId,
+                BrandId = BrandId,
+                Page = Page,
+                PageSize = int.Parse(_configuration[PageSize])
+            });
+
+            return products_model.Products.Select(p => new ProductViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                ImageUrl = p.ImageUrl,
+                Price = p.Price,
+                Order = p.Order,
+                BrandName = p.Brand?.Name ?? string.Empty
+            });
+        }
     }
 }

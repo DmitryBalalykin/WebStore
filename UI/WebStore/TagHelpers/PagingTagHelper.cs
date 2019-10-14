@@ -55,12 +55,17 @@ namespace WebStore.TagHelpers
 
             if (pageNumber == pageViewModel.PageNumer)
             {
+                a.MergeAttribute("data-page", pageViewModel.PageNumer.ToString());
                 li.AddCssClass("active");
             }
             else
             {
                 pageUrlValues["page"] = pageNumber;
-                a.Attributes["href"] = urlHelper.Action(PageAction, pageUrlValues);
+                a.Attributes["href"] = "#";//urlHelper.Action(PageAction, pageUrlValues);
+                foreach (var (key, value) in pageUrlValues.Where(p=> p.Value != null))
+                {
+                    a.MergeAttribute($"data-{key}", value.ToString());
+                }
             }
 
             a.InnerHtml.AppendHtml(pageNumber.ToString());
