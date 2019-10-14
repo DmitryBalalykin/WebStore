@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace WebStore.ViewModel
         [Required(AllowEmptyStrings =false, ErrorMessage ="Имя является обязательным для заполнения")]
         [Display(Name ="Имя")]
         [StringLength(maximumLength:20,MinimumLength =2,ErrorMessage ="Имя должно быть не менее 2 символов но не более 20 символов")]
+        [Remote("IsUserNameFree","Account", ErrorMessage ="Пользователь с таким именем уже существует!")]
         public string UserName { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Поле почта является обязательным для заполнения")]

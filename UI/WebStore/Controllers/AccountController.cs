@@ -26,6 +26,13 @@ namespace WebStore.Controllers
             return View(new LoginViewModel());//Будет возвращать представление с пустой моделькой
         }
 
+        public async Task<IActionResult> IsUserNameFree(string UserName)
+        {
+            return await _userManager.FindByNameAsync(UserName) is null
+                ? Json(true)
+                : Json(false);
+        }
+
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model,[FromServices] ILogger<AccountController> logger)
         {
