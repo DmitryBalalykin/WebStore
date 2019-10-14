@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -48,7 +49,9 @@ namespace WebStore.Tests.Controllers
                         Name = $"Brand of item id {id}"
                     }
                 });
-            var controller = new ShopController(product_data_mock.Object);
+            var configuration_mock = new Mock<IConfiguration>();
+
+            var controller = new ShopController(product_data_mock.Object, configuration_mock.Object);
             #endregion
 
             #region Act
@@ -78,7 +81,9 @@ namespace WebStore.Tests.Controllers
                 .Setup(p => p.GetProductById(It.IsAny<int>()))
                 .Returns(default(ProductDTO));//пустая ссылка
 
-            var controller = new ShopController(product_data_mock.Object);
+            var configuration_mock = new Mock<IConfiguration>();
+
+            var controller = new ShopController(product_data_mock.Object, configuration_mock.Object);
 
             var result = controller.ProductDetails(1);
 
@@ -88,11 +93,9 @@ namespace WebStore.Tests.Controllers
         [TestMethod]
         public void Product_Returns_Correct_View()
         {
-            var product_data_mock = new Mock<IProductService>();
-            product_data_mock
-                .Setup(p => p.GetProducts(It.IsAny<ProductFilter>()))
-                .Returns<ProductFilter>(f => new[]
-                {
+
+            var products = new List<ProductDTO>
+            {
                     new ProductDTO
                     {
                         Id = 1,
@@ -119,10 +122,16 @@ namespace WebStore.Tests.Controllers
                             Name = "Brand of Product 2"
                         }
                     }
-                });
+            };
 
+            var product_data_mock = new Mock<IProductService>();
+            product_data_mock
+                .Setup(p => p.GetProducts(It.IsAny<ProductFilter>()))
+                .Returns(new PagedProductDTO { Products = products });
 
-            var controller = new ShopController(product_data_mock.Object);
+            var configuration_mock = new Mock<IConfiguration>();
+
+            var controller = new ShopController(product_data_mock.Object, configuration_mock.Object);
 
             const int expected_section_id = 1;
             const int expected_brand_id = 1;

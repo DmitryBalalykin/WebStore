@@ -67,7 +67,7 @@ namespace WebStore.Infrastucture.Implementations
                     Name="SPORTSWEAR",
                     Order=0,
                     ParentId=null,
-                    
+
                 },
                 new Section
                 {
@@ -404,19 +404,31 @@ namespace WebStore.Infrastucture.Implementations
             return _sections;
         }
 
-        public IEnumerable<ProductDTO> GetProducts(ProductFilter filter)
+        public PagedProductDTO GetProducts(ProductFilter filter)
         {
             var products = _products;
 
-            if (filter is null) return products.Select(ProductMapper.ToDTO);
-
-            if (filter.SectionId.HasValue)//Если фильтр .HesValue-задан
+            if (filter?.SectionId != null)//Если фильтр .HesValue-задан
                 products = products.Where(x => x.SectionId == filter.SectionId.Value).ToList();
 
-            if (filter.BrandId.HasValue)
+            if (filter?.BrandId != null)
                 products = products.Where(x => x.BrandId == filter.BrandId.Value).ToList();
 
-            return products.Select(p=> p.ToDTO());
+            var total_count = products.Count();
+
+            if (filter?.PageSize != null)
+                products = products
+                   .Skip((filter.Page - 1) * (int)filter.PageSize)
+                   .Take((int)filter.PageSize)
+                   .ToList();
+
+            return new PagedProductDTO
+            {
+                Products = products
+                    .AsEnumerable()
+                    .Select(ProductMapper.ToDTO),
+                TotalCount = total_count
+            };
         }
 
         public IEnumerable<ProductDTO> GetProducts()

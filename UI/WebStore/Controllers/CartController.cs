@@ -119,5 +119,35 @@ namespace WebStore.Controllers
             ViewBag.Order = id;
             return View();
         }
+
+        #region AJAX api
+
+        public IActionResult GetCartViewModel() => ViewComponent("Cart");
+
+        public IActionResult AddToCartAJAX(int id)
+        {
+            _cartService.AddToCart(id);
+            return Json(new { id, message = $"Товар id:{id} добавлен в корзину"});
+        }
+
+        public IActionResult DecrementFromCartAJAX(int id)
+        {
+            _cartService.DecrementFromCart(id);
+            return Json(new { id, message = $"Колличество товара id:{id} уменьшено" });
+        }
+
+        public IActionResult RemoveAllAJAX()
+        {
+            _cartService.RemoveAll();
+            return Json(new { message = "В корзине пусто" });
+        }
+
+        public IActionResult RemoveFromCartAJAX(int id)
+        {
+            _cartService.RemoveFromCart(id);
+            return Json(new { id, message = $"Товар id: {id} удален из корзины" });
+        }
+
+        #endregion
     }
 }

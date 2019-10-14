@@ -38,7 +38,7 @@ namespace WebStore.Infrastucture.Interfaces
         /// Получение списка продуктов
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ProductDTO> GetProducts (ProductFilter filter);
+        PagedProductDTO GetProducts (ProductFilter filter);
 
         /// <summary>
         /// Получение списка продуктов без фильтра

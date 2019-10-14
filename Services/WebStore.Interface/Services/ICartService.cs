@@ -25,7 +25,6 @@ namespace WebStore.Interface.Services
         /// </summary>
         /// <param name="id"></param>
         void AddToCart(int id);
-
         /// <summary>
         /// Для конвертации viewModel и Моделью доменной
         /// </summary>

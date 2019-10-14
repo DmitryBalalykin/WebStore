@@ -26,23 +26,29 @@ namespace WebStore.Infrastucture.Implementations
             return _context.Brands.ToList();
         }
 
-        public IEnumerable<ProductDTO> GetProducts(ProductFilter filter)
+        public PagedProductDTO GetProducts(ProductFilter filter)
         {
             IQueryable<Product> products = _context.Products;
-            if (filter is null)
-                return products
-                    .AsEnumerable()
-                    .Select(p => p.ToDTO());
 
-            if (filter.SectionId.HasValue)//Если фильтр .HesValue-задан
+            if (filter.SectionId != null)//Если фильтр .HesValue-задан
                 products = products.Where(x => x.SectionId == filter.SectionId.Value);
 
-            if (filter.BrandId.HasValue)
+            if (filter.BrandId != null)
                 products = products.Where(x => x.BrandId == filter.BrandId.Value);
 
-            return products
-                .ToList()
-                .Select(ProductMapper.ToDTO);
+            var total_count = products.Count();
+
+            if (filter?.PageSize != null)
+                products = products
+                   .Skip((filter.Page - 1) * (int)filter.PageSize)
+                   .Take((int)filter.PageSize);
+
+            return new PagedProductDTO {
+                Products =products
+                .AsEnumerable()
+                .Select(ProductMapper.ToDTO),
+                TotalCount = total_count
+            };
 
         }
 
