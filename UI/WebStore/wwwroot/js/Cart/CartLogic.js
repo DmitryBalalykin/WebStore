@@ -14,7 +14,7 @@
     },
 
     initEvents: function () {
-        $("a.CallAddToCart").click(Cart.addToCart);
+        $("a.add-to-cart").click(Cart.addToCart);
         $(".cart_quantity_up").click(Cart.incrementItem);
         $(".cart_quantity_down").click(Cart.decrementItem);
         $(".cart_quantity_delete").click(Cart.removeFromCart);
@@ -41,7 +41,7 @@
     },
 
     refreshCartView: function () {
-        var container = $("#cartContainer");
+        var container = $("#CartContainer");
         $.get(Cart._properties.getCartViewLink)
             .done(function (result) { container.html(result); })
             .fail(function () { console.log("refreshCartView error"); });
